@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\User;
+use PhpParser\Node\Stmt\Label;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+
+class UserType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('matricule', TextType::class, [
+                'label' => 'Matricule',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Matricule']
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Email']
+            ])
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Le mot de passe et la confirmation doivent correspondre.',
+                'label' => 'Mot de Passe',
+                'required' => true,
+                'first_options' => ['label' => 'Mot de Passe','attr' => ['class' => 'form-control', 'placeholder' => 'Mot de Passe']],
+                'second_options' => ['label' => 'Confirmer le mot de passe','attr' => [ 'placeholder' => 'Mot de Passe','class' => 'form-control mb-5',]],
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Son Prénom']
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Son Nom']
+            ])
+            ->add('birthday', DateType::class, [
+                'widget' => 'single_text',
+                'label' => 'Date de Naissance',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('telephone', TextType::class, [
+                'label' => 'Téléphone',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Téléphone']
+            ])
+            ->add('service', TextType::class, [
+                'label' => 'Service',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Service']
+            ])
+            ->add('nameUser', TextType::class, [
+                'label' => 'Nom d\'Utilisateur',
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Nom d\'Utilisateur']
+            ])
+            ->add('photoUser', FileType::class, [
+                'label' => 'Photo',
+                'required' => false,
+                'data_class' => null,
+                'attr' => ['class' => 'form-control']
+            ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
+    }
+}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Address
+{% endblock %}
+
+{% block body %}
+	<div class="m-5">
+		<h1>Adicionner une nouvelle adresse</h1>
+
+		{{ include('address/formAddress.html.twig') }}
+
+		<button class="btn btn-primary mt-3">
+			<a class="text-white" href="{{ path('app_address_index') }}">back to list</a>
+		</button>
+	</div>
+{% endblock %}
