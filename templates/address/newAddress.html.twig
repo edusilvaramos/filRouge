@@ -1,16 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Address
-{% endblock %}
+{% block title %}New Address{% endblock %}
 
 {% block body %}
-	<div class="m-5">
-		<h1>Adicionner une nouvelle adresse</h1>
+<div class="container mt-5 mb-5">
+    <h1 class="text-center  text-success  mb-4">Ajouter une nouvelle adresse</h1>
 
-		{{ include('address/formAddress.html.twig') }}
+    <div class="card shadow-sm p-4">
+        <!-- Inclusão do Formulário -->
+        {{ include('address/formAddress.html.twig') }}
+    </div>
 
-		<button class="btn btn-primary mt-3">
-			<a class="text-white" href="{{ path('app_address_index') }}">back to list</a>
-		</button>
-	</div>
+    <div class="text-center mt-4">
+        <!-- Botão para voltar à lista -->
+        <a href="{{ path('app_address_index') }}" class="btn btn-outline-secondary btn-lg" aria-label="Retour à la liste">
+            <i class="bi bi-arrow-left-circle-fill"></i> Back to list
+        </a>
+    </div>
+</div>
 {% endblock %}

@@ -1,14 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Edit User
+{% endblock %}
 
 {% block body %}
-<div class="container mt-5 mb-5">
-    <h1>Editer les données du utilisateur</h1>
+	<div class="container mt-5 mb-5">
+		<h1 class="text-center text-primary mb-4">Éditer les données de l'utilisateur</h1>
+		<!-- Espacamento ajustado nos cards -->
+		<div class="row justify-content-center">
+			<div class="col-lg-12 col-md-8 col-12">
+				<div class="card shadow-sm p-4 rounded">
+					{{ include('user/formUser.html.twig', {'button_label': 'Mettre à jour'}) }}
+				</div>
+			</div>
+		</div>
+		<!-- Botão mais espaçado e estilizado -->
+		<div class="text-center mt-4">
+			<a class="btn btn-outline-primary btn-lg" href="{{ path('app_user_index') }}">
+				<i class="bi bi-arrow-left"></i>
+				Retour à la liste
+			</a>
+		</div>
+	</div>
 
-    {{ include('user/formUser.html.twig', {'button_label': 'Update'}) }}
-
-	<button class="btn btn-primary m-3 ">
-				<a class="text-white" href="{{ path('app_user_index') }}">Aller a la liste</a>
-			</button>
-</div>{% endblock %}
+{% endblock %}

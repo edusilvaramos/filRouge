@@ -46,8 +46,13 @@ class UserType extends AbstractType
             ->add('birthday', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date de Naissance',
-                'attr' => ['class' => 'form-control']
+                'html5' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'max' => (new \DateTime('now'))->format('Y-m-d'),
+                ],
             ])
+            
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Téléphone']

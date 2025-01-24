@@ -22,9 +22,7 @@ final class UserController extends AbstractController
         // $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
 
-        return $this->render('user/indexUser.html.twig', [
-            
-        ]);
+        return $this->render('user/indexUser.html.twig', []);
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
@@ -73,11 +71,15 @@ final class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
     {
+        // nom de l'image actuelle
+        $originalImage = $user->getphotoUser();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
 
+            
             // recuperer le mot de passe du form
             $user = $form->getData();
             $mdp = $user->getPassword();
@@ -86,15 +88,21 @@ final class UserController extends AbstractController
 
             // garder dans la db
             $user->setPassword($mdp);
+            
             // recuperer la photo e reinicier le chemin
             $chamin = "assets/images/user";
             $file = $form->get('photoUser')->getData();
+
+            if ($file) {
             $file->move($chamin, $file->getClientOriginalName());
             $user->setPhotoUser("assets/images/user/" . $file->getClientOriginalName());
+        } else { 
+            $user->setPhotoUser($originalImage);
 
+        }
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/editUser.html.twig', [

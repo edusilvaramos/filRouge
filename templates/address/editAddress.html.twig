@@ -1,20 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Address
-{% endblock %}
+{% block title %}Edit Address{% endblock %}
 
 {% block body %}
-	<div class="container mt-5-lg mb-5-lg mt-2  ">
-		<h1>
-			<i class="bi bi-house-gear"></i>
-			Edit Address</h1>
+<div class="container mt-5 mb-5">
+    <div class="text-center mb-4 ">
+        <h1 class="text-success">
+            <i class="bi bi-house-gear text-success"></i>
+            Edit Address
+        </h1>
+    </div>
 
-		{{ include('address/formAddress.html.twig', {'button_label': 'Save'}) }}
-		<div class="d-flex justify-content-between">
-			<button class="btn btn-primary m-3 text-white ">
-				<a class="text-white" href="{{ path('app_address_index') }}">
-					<i class="bi bi-arrow-left-circle-fill"></i>
-					Aller à la liste</a>
-			</button>
-	</div>
+    <div class="card shadow-sm p-4">
+        <!-- Inclusão do Formulário -->
+        {{ include('address/formAddress.html.twig', {'button_label': 'Save'}) }}
+    </div>
+
+    <div class="text-center mt-4">
+        <!-- Botão de voltar -->
+        <a href="{{ path('app_address_index') }}" class="btn btn-outline-primary btn-lg" aria-label="Retourner à la liste">
+            <i class="bi bi-arrow-left-circle-fill"></i> Aller à la liste
+        </a>
+    </div>
+</div>
 {% endblock %}

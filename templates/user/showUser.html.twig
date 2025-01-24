@@ -1,69 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User
-{% endblock %}
+{% block title %}User{% endblock %}
 
 {% block body %}
-	<div class="row">
-		<div class="col-5 mt-5 ms-5">
-		<img src="{{ asset('' ~ app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle w-50 p-3 ms-5">
-			<h1 class="text-success mx-auto ms-5">
-				{{ user.firstName }}
-				{{ user.lastName }}
-				</h1>
-		</div>
-		
-		<div class="col-7 mt-5 mb-5 w-50 fs-3">
-			<div>
-				<table class="table">
-					<tbody>
-						<tr>
-							<th>Email</th>
-							<td>{{ user.email }}</td>
-						</tr>
-						<tr>
-							<th>Role</th>
-							<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-						</tr>
-						<tr>
-							<th>Matricule</th>
-							<td>{{ user.matricule }}</td>
-						</tr>
-						<hr>
-						<tr>
-							<th>Nom</th>
-							<td>{{ user.firstName }}</td>
-						</tr>
-						<tr>
-							<th>Nom de Famille</th>
-							<td>{{ user.lastName }}</td>
-						</tr>
-						<tr>
-							<th>Né le</th>
-							<td>{{ user.birthday ? user.birthday|date('Y-m-d') : '' }}</td>
-						</tr>
-						<tr>
-							<th>Telephone</th>
-							<td>{{ user.telephone }}</td>
-						</tr>
-						<tr>
-							<th>Service</th>
-							<td>{{ user.service }}</td>
-						</tr>
-						<tr>
-							<th>nom d'utilisateur</th>
-							<td>{{ user.nameUser }}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+<div class="container mt-5 mb-5">
+    <div class="row align-items-center">
+        <!-- Coluna para a imagem -->
+        <div class="col-lg-4 col-md-6 text-center mb-4">
+            <img src="{{ asset('' ~ app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle w-75 shadow">
+            <h1 class="text-success mt-3">
+                {{ user.firstName }} {{ user.lastName }}
+            </h1>
+        </div>
+        
+        <!-- Coluna para as informações -->
+        <div class="col-lg-8 col-md-6">
+            <table class="table table-bordered table-hover fs-5 shadow-sm">
+                <tbody>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Matricule</th>
+                        <td>{{ user.matricule }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ user.firstName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom de Famille</th>
+                        <td>{{ user.lastName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Né le</th>
+                        <td>{{ user.birthday ? user.birthday|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Telephone</th>
+                        <td>{{ user.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Service</th>
+                        <td>{{ user.service }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom d'utilisateur</th>
+                        <td>{{ user.nameUser }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-			<button class="btn btn-primary m-3 ">
-				<a class="text-white fs-3" href="{{ path('app_user_index') }}"><i class="bi bi-arrow-left-circle-fill"></i> Aller a la liste</a>
-			</button>
-			<button class="btn btn-primary m-3 ">
-				<a class="text-white fs-3" href="{{ path('app_user_edit', {'id': user.id}) }}"><i class="bi bi-pencil-square"></i> Modifier les données</a>
-			</button>
-		</div>
-	</div>
+            <!-- Botões de ação -->
+            <div class="text-center mt-4">
+                <a class="btn btn-outline-primary btn-lg me-2" href="{{ path('app_user_index') }}" aria-label="Retour à la liste">
+                    <i class="bi bi-arrow-left-circle-fill"></i> Aller à la liste
+                </a>
+                <a class="btn btn-outline-success btn-lg" href="{{ path('app_user_edit', {'id': user.id}) }}" aria-label="Modifier les données">
+                    <i class="bi bi-pencil-square"></i> Modifier les données
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

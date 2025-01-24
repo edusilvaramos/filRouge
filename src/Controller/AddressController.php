@@ -14,24 +14,30 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/address')]
 final class AddressController extends AbstractController
 {
-
-    
     #[Route(name: 'app_address_index', methods: ['GET'])]
     public function index(AddressRepository $addressRepository): Response
     {
-        return $this->render('address/indexAddress.html.twig', [
-            'addresses' => $addressRepository->findAll(),
-        ]);
+        return $this->render('address/indexAddress.html.twig');
     }
 
     #[Route('/new', name: 'app_address_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Obtém o usuário conectado
+        $user = $this->getUser();
+
         $address = new Address();
+        if ($user) {
+            $address->setFName($user->getFirstName());
+            $address->setLName($user->getLastName());
+        }
+    
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $address->setUser($user);
             $entityManager->persist($address);
             $entityManager->flush();
 
@@ -73,7 +79,7 @@ final class AddressController extends AbstractController
     #[Route('/{id}', name: 'app_address_delete', methods: ['POST'])]
     public function delete(Request $request, Address $address, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$address->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $address->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($address);
             $entityManager->flush();
         }
