@@ -3,11 +3,20 @@
 namespace App\Form;
 
 use App\Entity\Project;
+use App\Entity\User;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Doctrine\ORM\EntityRepository;
 
 class ProjectType extends AbstractType
 {
@@ -41,9 +50,18 @@ class ProjectType extends AbstractType
                 'data_class' => null,
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextAreaType::class, [
                 'label' => 'Donnez une description',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('Employe', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'nameUser', // Campo exibido como rótulo
+                'multiple' => true, // Permite múltiplas escolhas
+                'expanded' => true, // Exibe como checkboxes
+                'label' => 'Associar Empregados',
+                'attr' => ['class' => 'form-check'], // Estilo para os checkboxes
+                'required' => false,
             ])
         ;
     }

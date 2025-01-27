@@ -37,9 +37,16 @@ class Project
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'Project')]
     private Collection $tasks;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
+    private Collection $Employe;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->Employe = new ArrayCollection();
     }
 
     public function __toString()
@@ -138,6 +145,30 @@ class Project
                 $task->setProject(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getEmploye(): Collection
+    {
+        return $this->Employe;
+    }
+
+    public function addEmploye(User $employe): static
+    {
+        if (!$this->Employe->contains($employe)) {
+            $this->Employe->add($employe);
+        }
+
+        return $this;
+    }
+
+    public function removeEmploye(User $employe): static
+    {
+        $this->Employe->removeElement($employe);
 
         return $this;
     }

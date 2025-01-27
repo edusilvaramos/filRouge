@@ -1,30 +1,35 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<div class="container mt-5 px-3 px-md-5">
-    <!-- Perfil do Usuário -->
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start mb-4">
-        <!-- Imagem do Usuário -->
-        <img src="{{ asset('' ~ app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-        
-        <!-- Nome do Usuário -->
-        <h1 class="text-success mt-3 mt-md-0 ms-md-5 fs-4 fs-md-2">
-            {{ app.user.firstName }} {{ app.user.lastName }}
-        </h1>
-    </div>
-    <!-- Linha Horizontal -->
-    <hr class="border border-danger rounded-1 border-2 opacity-100 mb-3"/>
-    <!-- Links do Usuário -->
-    <ul class="list-unstyled">
-        <li class="mb-2">
-            <a href="{{path('app_user_index')}}" class="text-decoration-none text-primary fs-5">
-                <i class="bi bi-person-circle me-2"></i>Mes coordonnées
-            </a>
-        </li>
-        <li>
-            <a href="{{path('app_address_index')}}" class="text-decoration-none text-primary fs-5">
-                <i class="bi bi-geo-alt-fill me-2"></i>Mes adresses
-            </a>
-        </li>
-    </ul>
-</div>
+	<div
+		class="container mt-5 px-3 px-md-5">
+		<!-- Perfil do Usuário -->
+		<div
+			class="d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start mb-4">
+			<!-- Imagem do Usuário -->
+			<img
+			src="{{ asset('' ~ app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+
+			<!-- Nome do Usuário -->
+			<h1 class="text-success mt-3 mt-md-0 ms-md-5 fs-4 fs-md-2">
+				{{ app.user.firstName }}
+				{{ app.user.lastName }}
+			</h1>
+		</div>
+		<!-- Linha Horizontal -->
+		<hr
+		class="border border-danger rounded-1 border-2 opacity-100 mb-3"/>
+		<!-- Links do Usuário -->
+		<ul class="list-unstyled">
+			<li class="mb-2">
+				<a href="{{path('app_user_index')}}" class="text-decoration-none text-primary fs-5">
+					<i class="bi bi-person-circle me-2"></i>Mes coordonnées
+				</a>
+			</li>
+			<li>
+				<a href="{{path('app_address_index')}}" class="text-decoration-none text-primary fs-5">
+					<i class="bi bi-geo-alt-fill me-2"></i>Mes adresses
+				</a>
+			</li>
+		</ul>
+	</div>
 {% endblock %}

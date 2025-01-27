@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Team;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,34 +21,44 @@ final class UserController extends AbstractController
     {
         // block the page only for users
         // $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
 
-        return $this->render('user/indexUser.html.twig', []);
+        return $this->render('user/indexUser.html.twig');
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $hasher
+    ): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // recuperer le mot de passe du form
-            $user = $form->getData();
-            $mdp = $user->getPassword();
-            // hasher le mot de passe
-            $mdp = $hasher->hashPassword($user, $mdp);
-
-            // garder dans la db
-            $user->setPassword($mdp);
-            // recuperer la photo e reinicier le chemin
-            $chamin = "assets/images/user";
+            // Recuperar a equipe selecionada no formulário
+            $teamName = $form->get('team')->getData();
+            // Buscar a equipe no banco de dados
+            $team = $entityManager->getRepository(Team::class)->findOneBy(['name' => $teamName]);
+            if (!$team) {
+                // Criar uma nova equipe se não existir
+                $team = new Team();
+                $team->setName($teamName);
+                $entityManager->persist($team);
+            }
+            // Associar o usuário à equipe
+            $user->setTeam($team);
+            // Hash do password
+            $password = $hasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($password);
+            // Salvar foto do usuário (se aplicável)
+            $path = "assets/images/user";
             $file = $form->get('photoUser')->getData();
-            $file->move($chamin, $file->getClientOriginalName());
-            $user->setPhotoUser("assets/images/user/" . $file->getClientOriginalName());
-
+            if ($file) {
+                $file->move($path, $file->getClientOriginalName());
+                $user->setPhotoUser($path . '/' . $file->getClientOriginalName());
+            }
+            // Persistir o usuário
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -56,9 +67,11 @@ final class UserController extends AbstractController
 
         return $this->render('user/newUser.html.twig', [
             'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
+
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
@@ -79,7 +92,7 @@ final class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            
+
             // recuperer le mot de passe du form
             $user = $form->getData();
             $mdp = $user->getPassword();
@@ -88,18 +101,17 @@ final class UserController extends AbstractController
 
             // garder dans la db
             $user->setPassword($mdp);
-            
+
             // recuperer la photo e reinicier le chemin
             $chamin = "assets/images/user";
             $file = $form->get('photoUser')->getData();
 
             if ($file) {
-            $file->move($chamin, $file->getClientOriginalName());
-            $user->setPhotoUser("assets/images/user/" . $file->getClientOriginalName());
-        } else { 
-            $user->setPhotoUser($originalImage);
-
-        }
+                $file->move($chamin, $file->getClientOriginalName());
+                $user->setPhotoUser("assets/images/user/" . $file->getClientOriginalName());
+            } else {
+                $user->setPhotoUser($originalImage);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);

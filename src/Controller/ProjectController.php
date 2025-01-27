@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
+use App\Entity\Team;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use App\Repository\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,16 +20,18 @@ final class ProjectController extends AbstractController
     #[Route(name: 'app_project_index', methods: ['GET'])]
     public function index(ProjectRepository $projectRepository): Response
     {
-        return $this->render('project/projectIndex.html.twig', [
-            'projects' => $projectRepository->findAll(),
-        ]);
+        return $this->render('project/projectIndex.html.twig');
     }
 
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TeamRepository $teamRepository): Response
     {
+        $teams = $entityManager->getRepository(Team::class)->findAll();
+        $employes = $entityManager->getRepository(User::class)->findAll();
+
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -46,27 +51,35 @@ final class ProjectController extends AbstractController
         return $this->render('project/projectNew.html.twig', [
             'project' => $project,
             'form' => $form,
+            'teams' => $teams,
+            'employes' => $employes
         ]);
     }
 
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
-    public function show(Project $project): Response
+    public function show(Project $project, Request $request): Response
     {
+        // Obtendo a sessão do Request
+        $session = $request->getSession();
+        // Armazenando o ID do projeto na sessão
+        $session->set('project_id', $project->getId());
+        // Renderizando o template com o projeto
         return $this->render('project/projectShow.html.twig', [
             'project' => $project,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
         // nom de l'image actuelle
         $originalImage = $project->getImageProject();
-        
+
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
-      
-        
+
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $chamin = "assets/images/project";

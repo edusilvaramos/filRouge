@@ -1,42 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task{% endblock %}
+{% block title %}Task Details{% endblock %}
 
 {% block body %}
-    <h1>Task</h1>
+<div class="container my-4">
+    <h1 class="text-center mb-4 text-primary">Tache Details</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ task.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ task.title }}</td>
-            </tr>
-            <tr>
-                <th>DescriptionTask</th>
-                <td>{{ task.descriptionTask }}</td>
-            </tr>
-            <tr>
-                <th>InitDate</th>
-                <td>{{ task.initDate ? task.initDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>FinishDate</th>
-                <td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>FlagTask</th>
-                <td>{{ task.flagTask }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">ID</th>
+                        <td>{{ task.id }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Title</th>
+                        <td>{{ task.title }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ task.descriptionTask }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Start Date</th>
+                        <td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'Not set' }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Finish Date</th>
+                        <td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : 'Not set' }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Flag</th>
+                        <td>{{ task.flagTask }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <a href="{{ path('app_task_index') }}">back to list</a>
-
-    <a href="{{ path('app_task_edit', {'id': task.id}) }}">edit</a>
-
-    {{ include('task/deleteTask.html.twig') }}
+    <div class="d-flex justify-content-center mt-4 gap-2">
+        <a href="{{ path('app_task_index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Back to list
+        </a>
+        <a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
+        {{ include('task/deleteTask.html.twig') }}
+    </div>
+</div>
 {% endblock %}

@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-use PhpParser\Node\Stmt\Label;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
 {
@@ -32,8 +32,8 @@ class UserType extends AbstractType
                 'invalid_message' => 'Le mot de passe et la confirmation doivent correspondre.',
                 'label' => 'Mot de Passe',
                 'required' => true,
-                'first_options' => ['label' => 'Mot de Passe','attr' => ['class' => 'form-control', 'placeholder' => 'Mot de Passe']],
-                'second_options' => ['label' => 'Confirmer le mot de passe','attr' => [ 'placeholder' => 'Mot de Passe','class' => 'form-control mb-5',]],
+                'first_options' => ['label' => 'Mot de Passe', 'attr' => ['class' => 'form-control', 'placeholder' => 'Mot de Passe']],
+                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['placeholder' => 'Mot de Passe', 'class' => 'form-control mb-5',]],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
@@ -52,11 +52,36 @@ class UserType extends AbstractType
                     'max' => (new \DateTime('now'))->format('Y-m-d'),
                 ],
             ])
-            
+
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Téléphone']
             ])
+            ->add('team', ChoiceType::class, [
+                'label' => 'Equipe',
+                'choices' => [
+                    'Support' => 'support',
+                    'Frontend' => 'frontend',
+                    'Backend' => 'backend',
+                    'DevOps' => 'devops',
+                    'QA (Quality Assurance)' => 'qa',
+                    'Design' => 'design',
+                    'Product Management' => 'product_management',
+                    'Marketing' => 'marketing',
+                    'Sales' => 'sales',
+                    'Data Science' => 'data_science',
+                    'Machine Learning' => 'machine_learning',
+                    'Customer Success' => 'customer_success',
+                    'Cybersecurity' => 'cybersecurity',
+                    'IT Operations' => 'it_operations',
+                ],
+                'placeholder' => 'Choisissez une équipe',
+                'required' => true,
+                'mapped' => false, // Isso indica que o campo não será automaticamente mapeado para a entidade User
+                'attr' => ['class' => 'form-control'],
+            ])
+            
+
             ->add('service', TextType::class, [
                 'label' => 'Service',
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Service']

@@ -11,6 +11,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextAreaType;
 
 class TaskType extends AbstractType
 {
@@ -21,7 +23,7 @@ class TaskType extends AbstractType
                 'label' => 'Titre de la tache',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('descriptionTask', TextType::class, [
+            ->add('descriptionTask', TextAreaType::class, [
                 'label' => 'Description de la tache',
                 'attr' => ['class' => 'form-control']
             ])
