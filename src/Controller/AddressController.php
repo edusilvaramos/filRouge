@@ -23,7 +23,6 @@ final class AddressController extends AbstractController
     #[Route('/new', name: 'app_address_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Obtém o usuário conectado
         $user = $this->getUser();
 
         $address = new Address();

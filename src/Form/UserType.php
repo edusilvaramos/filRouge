@@ -77,7 +77,7 @@ class UserType extends AbstractType
                 ],
                 'placeholder' => 'Choisissez une équipe',
                 'required' => true,
-                'mapped' => false, // Isso indica que o campo não será automaticamente mapeado para a entidade User
+                'mapped' => false,
                 'attr' => ['class' => 'form-control'],
             ])
             

@@ -3,14 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
+use App\Model\SearshData;
+use App\Form\SeachUserType;
+
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Security;
+
 
 
 
@@ -18,58 +25,69 @@ use Symfony\Component\Routing\Attribute\Route;
 final class TaskController extends AbstractController
 {
     #[Route(name: 'app_task_index', methods: ['GET'])]
-public function index(Request $request, TaskRepository $taskRepository, EntityManagerInterface $entityManager): Response
-{
-    $session = $request->getSession();
-    $projectId = $session->get('project_id'); 
-    $project = $entityManager->getRepository(Project::class)->find($projectId);
-
-    // Busca tarefas associadas ao projeto
-    $tasks = $taskRepository->findBy(['Project' => $project]);
-
-    return $this->render('task/indexTask.html.twig', [
-        'project' => $project,
-        'tasks' => $tasks,
-    ]);
-}
-
-
-    #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, TaskRepository $taskRepository, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
         $projectId = $session->get('project_id');
-
-        // Obtém o usuário conectado
-        $user = $this->getUser();
-
-        $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
-        $form->handleRequest($request);
         $project = $entityManager->getRepository(Project::class)->find($projectId);
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            $task->setUser($user);
-            $task->setProject($project);
 
-            $entityManager->persist($task);
-            $entityManager->flush();
+        // Busca tarefas associadas ao projeto
+        $tasks = $taskRepository->findBy(['Project' => $project]);
 
-            return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+        return $this->render('task/indexTask.html.twig', [
+            'project' => $project,
+            'tasks' => $tasks,
+        ]);
+    }
+
+
+    #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,): Response
+    {
+        $searshData = new SearshData();
+        $formSearsh = $this->createForm(SeachUserType::class, $searshData);
+
+        $formSearsh->handleRequest($request);
+        if ($formSearsh->isSubmitted() && $formSearsh->isValid()) {
+            dd($searshData);
         }
 
+    
+        // $session = $request->getSession();
+        // $projectId = $session->get('project_id');
+        // $project = $entityManager->getRepository(Project::class)->find($projectId);
+        // $task = new Task();
+        // $form = $this->createForm(TaskType::class, $task);
+        // $form->handleRequest($request);
+        // $SeachUser = $this->createForm(SeachUserType::class);
+        // if ($SeachUser->isSubmitted() && $SeachUser->isValid()) {
+        //     $SeachUser = $SeachUser->getData();
+        // }
+        // $users = $userRepository->findAll();
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $task = $form->getData();
+        //     $task->setProject($project);
+        //     $entityManager->persist($task);
+        //     $entityManager->flush();
+        //     return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+        // }
         return $this->render('task/newTask.html.twig', [
-            'task' => $task,
-            'form' => $form,
-            'projectId' => $projectId,
+            // 'task' => $task,
+            // 'form' => $form,
+            // 'projectId' => $projectId,
+            // 'users' => $users,
+            // 'SeachUser' => $SeachUser
+            'formSearsh' => $formSearsh->createView(),
         ]);
+        // -------------------------------------------
+
     }
 
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task): Response
     {
 
-        
+
         return $this->render('task/showTask.html.twig', [
             'task' => $task,
         ]);

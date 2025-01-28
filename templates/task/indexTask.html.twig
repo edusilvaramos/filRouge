@@ -1,100 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task Index{% endblock %}
+{% block title %}Task Index
+{% endblock %}
 
 {% block body %}
-<div class="container">
-  <h1 class="text-center text-success">Tasks for Project: {{ project.projectName }}</h1>
+	<div class="container">
+		<h1 class="text-center text-success">Tasks for Project:
+			{{ project.projectName }}</h1>
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Start Date</th>
-          <th>End Date</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for task in tasks %}
-        <tr>
-          <td>{{ task.id }}</td>
-          <td>{{ task.title }}</td>
-          <td>{{ task.descriptionTask }}</td>
-          <td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'N/A' }}</td>
-          <td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : 'N/A' }}</td>
-          <td>{{ task.flagTask }}</td>
-          <td>
-            <a href="{{ path('app_task_show', { id: task.id }) }}" class="btn btn-info btn-sm">View</a>
-            <a href="{{ path('app_task_edit', { id: task.id }) }}" class="btn btn-warning btn-sm">Edit</a>
-          </td>
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="7" class="text-center">No tasks found for this project</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Title</th>
+						<th>Description</th>
+						<th>Date de Debut</th>
+						<th>Date de Fin</th>
+						<th>Status</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for task in tasks %}
+						<tr>
+							<td>{{ task.id }}</td>
+							<td>{{ task.title }}</td>
+							<td>{{ task.descriptionTask }}</td>
+							<td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'N/A' }}</td>
+							<td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : 'N/A' }}</td>
+							<td {% if task.flagTask == 'completed' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ task.flagTask }}</td>
+							<td>
+								<a href="{{ path('app_task_show', { id: task.id }) }}" class="btn btn-info btn-sm">View</a>
+								<a href="{{ path('app_task_edit', { id: task.id }) }}" class="btn btn-warning btn-sm">Edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7" class="text-center">No tasks found for this project</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 
-  <div class="text-center mt-4">
-    <a href="{{ path('app_task_new') }}" class="btn btn-primary">Create New Task</a>
-  </div>
-</div>
+			<div class="text-center mt-4">
+				<a href="{{ path('app_task_new') }}" class="btn btn-primary">Creer une nouvelle tache</a>
+			</div>
+		</div>
 
-<style>
-  .container {
-    max-width: 90%;
-    margin: auto;
-    padding: 20px;
-  }
+	<style>
+		.container {
+			max-width: 90%;
+			margin: auto;
+			padding: 20px;
+		}
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-  .table th, .table td {
-    text-align: center;
-    vertical-align: middle;
-  }
+		.table th,
+		.table td {
+			text-align: center;
+			vertical-align: middle;
+		}
 
-  .btn {
-    margin: 2px;
-  }
+		.btn {
+			margin: 2px;
+		}
 
-  @media (max-width: 768px) {
-    .table th, .table td {
-      white-space: nowrap;
-      font-size: 14px;
-      padding: 5px;
-    }
+		@media(max-width: 768px) {
+			.table th,
+			.table td {
+				white-space: nowrap;
+				font-size: 14px;
+				padding: 5px;
+			}
 
-    .text-center {
-      font-size: 16px;
-    }
+			.text-center {
+				font-size: 16px;
+			}
 
-    .btn {
-      font-size: 12px;
-      padding: 5px 8px;
-    }
-  }
+			.btn {
+				font-size: 12px;
+				padding: 5px 8px;
+			}
+		}
 
-  @media (max-width: 480px) {
-    .table th, .table td {
-      font-size: 12px;
-    }
+		@media(max-width: 480px) {
+			.table th,
+			.table td {
+				font-size: 12px;
+			}
 
-    .btn {
-      font-size: 10px;
-      padding: 4px 6px;
-    }
-  }
-</style>
-
+			.btn {
+				font-size: 10px;
+				padding: 4px 6px;
+			}
+		}
+	</style>
 {% endblock %}

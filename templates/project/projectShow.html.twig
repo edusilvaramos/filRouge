@@ -13,7 +13,14 @@
 			<img src="{{ project.imageProject ? asset(project.imageProject) : asset('path/to/default-image.jpg') }}" alt="Project Image" class="card-img-top" style="height: 300px; object-fit: cover;">
 
 			<div class="card-body">
-				<h2 class="card-title text-primary">{{ project.projectName }}</h2>
+				<div class="d-flex justify-content-between">
+					<h2 class="card-title text-primary">{{ project.projectName }}</h2>
+					<h3>{{ project.isFinish }}</h3>
+					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" %}{% endif %}
+					
+					>{{ flagTaskStatus }}</h3>
+				</div>
+
 				<p class="card-text">
 					<strong>Description:</strong>
 					{{ project.description }}</p>

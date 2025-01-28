@@ -43,6 +43,9 @@ class Project
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
     private Collection $Employe;
 
+    #[ORM\Column]
+    private ?bool $isFinish = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -169,6 +172,18 @@ class Project
     public function removeEmploye(User $employe): static
     {
         $this->Employe->removeElement($employe);
+
+        return $this;
+    }
+
+    public function isFinish(): ?bool
+    {
+        return $this->isFinish;
+    }
+
+    public function setIsFinish(bool $isFinish): static
+    {
+        $this->isFinish = $isFinish;
 
         return $this;
     }

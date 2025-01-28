@@ -1,21 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Task{% endblock %}
+{% block title %}New Task
+{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-12 col-sm-12">
-            <h1 class="text-center mb-4">Create New Task</h1>
+	{# <div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-12 col-sm-12">
+				<h1 class="text-center mb-4 text-primary">Create New Task</h1>
 
-            <div class="card shadow p-4">
-                {{ include("task/formTask.html.twig") }}
-            </div>
+				<div class="card shadow p-4">
+					{{ include("task/formTask.html.twig") }}
+				</div>
 
-            <div class="mt-4 text-center">
-                <a href="{{ path('app_task_index') }}" class="btn btn-secondary">Back to List</a>
-            </div>
-        </div>
-    </div>
-</div>
+				<div class="mt-4 text-center">
+					<a href="{{ path('app_task_index') }}" class="btn btn-secondary">Back to List</a>
+				</div>
+			</div>
+		</div> #}
+		{% include "task/searsh.html.twig" with {formSearsh:formSearsh} only %}
+
+		{# <table class="table mt-4">
+			<thead>
+				<tr>
+					<th>Nom</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in users %}
+					<tr name="elements" id="{{ 'user'~ user.id}}">
+						<td>{{ user.firstName }}</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="10">Rien a afficher</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table> #}
+	</div>
+
+
 {% endblock %}

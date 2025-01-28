@@ -65,12 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user')]
     private Collection $addresses;
 
-    /**
-     * @var Collection<int, Task>
-     */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'user')]
-    private Collection $tasks;
-
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)] // Permite que o campo seja opcional
     private ?Team $team = null;
@@ -80,14 +74,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'Employe')]
     private Collection $projects;
+
+    /**
+     * @var Collection<int, Task>
+     */
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'employe')]
+    private Collection $task;
     
 
    
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
-        $this->tasks = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->task = new ArrayCollection();
     }
 
     public function __toString()
@@ -296,36 +296,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
-
-    public function addTask(Task $task): static
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTask(Task $task): static
-    {
-        if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
-            if ($task->getUser() === $this) {
-                $task->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getTeam(): ?Team
     {
         return $this->team;
@@ -360,6 +330,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->projects->removeElement($project)) {
             $project->removeEmploye($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTask(): Collection
+    {
+        return $this->task;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->task->contains($task)) {
+            $this->task->add($task);
+            $task->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->task->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getEmploye() === $this) {
+                $task->setEmploye(null);
+            }
         }
 
         return $this;

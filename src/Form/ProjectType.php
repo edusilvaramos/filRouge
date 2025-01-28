@@ -11,12 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Doctrine\ORM\EntityRepository;
+
 
 class ProjectType extends AbstractType
 {
@@ -29,21 +25,20 @@ class ProjectType extends AbstractType
             ])
             ->add('initDate', null, [
                 'widget' => 'single_text',
-                'data' => new \DateTime('now', new \DateTimeZone('Europe/Paris')), 
+                'data' => new \DateTime('now', new \DateTimeZone('Europe/Paris')),
                 'label' => 'Date de debut',
                 'attr' => ['class' => 'form-control'],
             ])
-            
+
             ->add('finishDate', null, [
                 'widget' => 'single_text',
                 'html5' => true,
                 'attr' => [
-                    'min' => (new \DateTime('now'))->format('Y-m-d'), 
+                    'min' => (new \DateTime('now'))->format('Y-m-d'),
                     'class' => 'form-control',
                 ],
                 'label' => 'Date de fin',
             ])
-            
             ->add('imageProject', FileType::class, [
                 'label' => 'Photo',
                 'required' => false,
@@ -54,15 +49,19 @@ class ProjectType extends AbstractType
                 'label' => 'Donnez une description',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('Employe', EntityType::class, [
+            ->add('Employe', EntityType::class, [ 
                 'class' => User::class,
-                'choice_label' => 'nameUser', // Campo exibido como rótulo
-                'multiple' => true, // Permite múltiplas escolhas
-                'expanded' => true, // Exibe como checkboxes
-                'label' => 'Associar Empregados',
-                'attr' => ['class' => 'form-check'], // Estilo para os checkboxes
+                'choice_label' => 'nameUser',
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Employés du Projet',
+                'attr' => [
+                    'class' => 'form-check form-control list-group list-group-flush',
+                    'style' => 'width: 100%; height: 100px; overflow-y: scroll;',
+                ],
                 'required' => false,
             ])
+            
         ;
     }
 

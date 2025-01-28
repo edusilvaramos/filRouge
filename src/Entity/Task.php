@@ -29,11 +29,13 @@ class Task
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $flagTask = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Project $Project = null;
+
+    #[ORM\ManyToOne(inversedBy: 'task')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $employe = null;
 
     public function __toString()
     {
@@ -105,18 +107,6 @@ class Task
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getProject(): ?Project
     {
         return $this->Project;
@@ -125,6 +115,18 @@ class Task
     public function setProject(?Project $Project): static
     {
         $this->Project = $Project;
+
+        return $this;
+    }
+
+    public function getEmploye(): ?User
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?User $employe): static
+    {
+        $this->employe = $employe;
 
         return $this;
     }
