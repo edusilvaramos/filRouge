@@ -9,6 +9,8 @@ use App\Form\UserType;
 use App\Form\SearchType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,24 +38,22 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
         $users = [];
         $users = $userRepository->findAll();
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $users = $userRepository->searchUsers($search->string, null, null, $search->team);
         }
-    
+
         return $this->render('user/searchUser.html.twig', [
             'users' => $users,
             'searchForm' => $form->createView(),
         ]);
     }
-    
-    
-
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $hasher
+        UserPasswordHasherInterface $hasher,
+        MailerInterface $mailer
     ): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -75,7 +75,7 @@ final class UserController extends AbstractController
             // Hash do password
             $password = $hasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
-            // Salvar foto do usuário (se aplicável)
+            // Salvar foto do usuário
             $path = "assets/images/user";
             $file = $form->get('photoUser')->getData();
             if ($file) {
@@ -86,6 +86,9 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // **Chamando a função de envio de e-mail**
+            $this->sendEmail($mailer, $user);
+
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -95,8 +98,26 @@ final class UserController extends AbstractController
         ]);
     }
 
+    //  Função separada para enviar o e-mail
 
+    private function sendEmail(MailerInterface $mailer, User $user)
+    {
+        $email = (new TemplatedEmail())
+            ->from('edusilvaramos@hotmail.com')
+            ->to($user->getEmail()) // email do user cadastrado
+            ->subject('Confirmation de création de compte')
+            ->htmlTemplate('emails/confirmation.html.twig')
+            ->context([
+                'user' => [
+                    'firstName' => $user->getFirstName(),
+                    'lastName' => $user->getLastName(),
+                    'email' => $user->getEmail(),
+                    'team' => $user->getTeam()->getName(),
+                ],
+            ]);
 
+        $mailer->send($email);
+    }
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {

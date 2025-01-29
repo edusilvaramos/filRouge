@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Confirmation de Création de Compte</title>
+		{% apply inline_css(source('@style/email.css')) %}
+	</head>
+	<body>
+		<div class="container">
+			<h2>Bonjour
+				{{ user.firstName }}
+				{{ user.lastName }},</h2>
+			<p>Votre compte a été créé avec succès.</p>
+
+			<p>
+				<strong>Voici vos informations :</strong>
+			</p>
+			<ul>
+				<li>
+					<strong>Email :</strong>
+					{{ user.email }}</li>
+				<li>
+					<strong>Équipe :</strong>
+					{{ user.team }}</li>
+			</ul>
+
+			<p>Vous pouvez vous connecter en cliquant sur le bouton ci-dessous :</p>
+			<a class="btn" href="{{ path('app_login') }}">
+				Se connecter
+			</a>
+
+			<p class="footer">Merci de nous rejoindre !</p>
+		</div>
+
+	</body>
+	{% endapply %}
+</html>

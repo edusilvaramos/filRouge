@@ -38,7 +38,7 @@ final class TaskController extends AbstractController
 
 
     #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, MailerInterface $mailer): Response
     {
         $session = $request->getSession();
         $projectId = $session->get('project_id');
@@ -62,6 +62,8 @@ final class TaskController extends AbstractController
             $entityManager->persist($task);
             $entityManager->flush();
             return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
+            // função de envio de e-mail
+            $this->sendEmail($mailer, $user);
         }
         return $this->render('task/newTask.html.twig', [
             'task' => $task,
@@ -69,9 +71,16 @@ final class TaskController extends AbstractController
             'projectId' => $projectId,
       
         ]);
-        // -------------------------------------------
-
     }
+
+     // ------------------  email -----------------------------------------
+
+
+  
+
+
+
+
 
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task): Response
