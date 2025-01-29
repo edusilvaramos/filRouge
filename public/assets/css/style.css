@@ -1,0 +1,45 @@
+/* :root {
+    --font-size-primary: 1rem; 
+    --font-size-large: 1.25rem; 
+}
+
+body {
+    font-size: var(--font-size-primary);
+}
+
+@media (min-width: 992px) {
+    body {
+        font-size: var(--font-size-large);
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .container img {
+        width: 120px;
+        height: 120px;
+    }
+
+    ul {
+        padding-left: 0;
+    }
+} */
+
+/* Exemplo de melhorias */
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+}
+
+a.btn-primary {
+    text-decoration: none;
+    font-size: 1rem;
+}
