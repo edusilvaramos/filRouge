@@ -34,7 +34,7 @@ class Task
     private ?Project $Project = null;
 
     #[ORM\ManyToOne(inversedBy: 'task')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $employe = null;
 
     public function __toString()

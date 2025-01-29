@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Classes\Search;
 use App\Entity\User;
 use App\Entity\Team;
 use App\Form\UserType;
+use App\Form\SearchType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +26,28 @@ final class UserController extends AbstractController
 
         return $this->render('user/indexUser.html.twig');
     }
+
+
+    #[Route('/searchUser', name: 'app_user_search', methods: ['GET'])]
+    public function searchUser(Request $request, UserRepository $userRepository): Response
+    {
+        $search = new Search();
+        $form = $this->createForm(SearchType::class, $search);
+        $form->handleRequest($request);
+        $users = [];
+        $users = $userRepository->findAll();
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $users = $userRepository->searchUsers($search->string, null, null, $search->team);
+        }
+    
+        return $this->render('user/searchUser.html.twig', [
+            'users' => $users,
+            'searchForm' => $form->createView(),
+        ]);
+    }
+    
+    
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(

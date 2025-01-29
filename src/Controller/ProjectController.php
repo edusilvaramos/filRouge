@@ -3,19 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Project;
-use App\Entity\Task;
-use App\Entity\User;
-use App\Entity\Team;
 use App\Form\ProjectType;
-use App\Repository\ProjectRepository;
-use App\Repository\TeamRepository;
+use App\Repository\UserRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Validator\Constraints\Isin;
 
 #[Route('/project')]
 final class ProjectController extends AbstractController
@@ -28,25 +23,42 @@ final class ProjectController extends AbstractController
         return $this->render('project/projectIndex.html.twig');
     }
 
-    #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, TeamRepository $teamRepository): Response
-    {
-        $teams = $entityManager->getRepository(Team::class)->findAll();
-        $employes = $entityManager->getRepository(User::class)->findAll();
 
+    #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // 🔹 Captura as matrículas digitadas pelo usuário
+            $matricules = $form->get('Employe')->getData();
 
+            if (!empty($matricules)) {
+                // 🔹 Busca os usuários no banco de dados com base nas matrículas digitadas
+                $employeEntities = $userRepository->createQueryBuilder('u')
+                    ->where('u.matricule IN (:matricules)')
+                    ->setParameter('matricules', $matricules)
+                    ->getQuery()
+                    ->getResult();
+
+                // 🔹 Adiciona os usuários encontrados ao projeto
+                foreach ($employeEntities as $user) {
+                    $project->addEmploye($user);
+                }
+            }
+
+            // 🔹 Gerenciamento de upload de imagem
             $chamin = "assets/images/project";
             $file = $form->get('imageProject')->getData();
-            $file->move($chamin, $file->getClientOriginalName());
-            $project->setimageProject("assets/images/project/" . $file->getClientOriginalName());
+            if ($file) {
+                $fileName = uniqid() . '.' . $file->guessExtension(); // Garante um nome único
+                $file->move($chamin, $fileName);
+                $project->setImageProject($chamin . '/' . $fileName);
+            }
 
-
+            // 🔹 Persistência no banco de dados
             $entityManager->persist($project);
             $entityManager->flush();
 
@@ -56,10 +68,9 @@ final class ProjectController extends AbstractController
         return $this->render('project/projectNew.html.twig', [
             'project' => $project,
             'form' => $form,
-            'teams' => $teams,
-            'employes' => $employes
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_project_show', methods: ['GET'])]
     public function show(int $id, Request $request, TaskRepository $taskRepository, EntityManagerInterface $entityManager): Response

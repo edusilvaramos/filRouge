@@ -13,6 +13,7 @@
 				<thead>
 					<tr>
 						<th>ID</th>
+						<th>Employee affectee</th>
 						<th>Title</th>
 						<th>Description</th>
 						<th>Date de Debut</th>
@@ -25,6 +26,7 @@
 					{% for task in tasks %}
 						<tr>
 							<td>{{ task.id }}</td>
+							<td>{{ task.employe.nameUser }} </td>
 							<td>{{ task.title }}</td>
 							<td>{{ task.descriptionTask }}</td>
 							<td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'N/A' }}</td>

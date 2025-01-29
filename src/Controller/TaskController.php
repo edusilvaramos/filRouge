@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Entity\User;
 use App\Form\TaskType;
 use App\Model\SearshData;
-use App\Form\SeachUserType;
-
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Security;
 
 
 
@@ -44,40 +40,34 @@ final class TaskController extends AbstractController
     #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository,): Response
     {
-        $searshData = new SearshData();
-        $formSearsh = $this->createForm(SeachUserType::class, $searshData);
+        $session = $request->getSession();
+        $projectId = $session->get('project_id');
+        $project = $entityManager->getRepository(Project::class)->find($projectId);
 
-        $formSearsh->handleRequest($request);
-        if ($formSearsh->isSubmitted() && $formSearsh->isValid()) {
-            dd($searshData);
+        $task = new Task();
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+     
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $form->getData();
+            $task->setProject($project);
+            $matricule = $form->get('matricule')->getData();
+            $user = $userRepository->findOneBy(['matricule' => $matricule]);
+            if (!$user) {
+                // Se não encontrar o usuário, exibe um erro
+                $this->addFlash('danger', 'Aucun utilisateur trouvé avec cette matricule.');
+                return $this->redirectToRoute('task_new'); // Redireciona para o formulário
+            }
+            $task->setEmploye($user);
+            $entityManager->persist($task);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
         }
-
-    
-        // $session = $request->getSession();
-        // $projectId = $session->get('project_id');
-        // $project = $entityManager->getRepository(Project::class)->find($projectId);
-        // $task = new Task();
-        // $form = $this->createForm(TaskType::class, $task);
-        // $form->handleRequest($request);
-        // $SeachUser = $this->createForm(SeachUserType::class);
-        // if ($SeachUser->isSubmitted() && $SeachUser->isValid()) {
-        //     $SeachUser = $SeachUser->getData();
-        // }
-        // $users = $userRepository->findAll();
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $task = $form->getData();
-        //     $task->setProject($project);
-        //     $entityManager->persist($task);
-        //     $entityManager->flush();
-        //     return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
-        // }
         return $this->render('task/newTask.html.twig', [
-            // 'task' => $task,
-            // 'form' => $form,
-            // 'projectId' => $projectId,
-            // 'users' => $users,
-            // 'SeachUser' => $SeachUser
-            'formSearsh' => $formSearsh->createView(),
+            'task' => $task,
+            'form' => $form,
+            'projectId' => $projectId,
+      
         ]);
         // -------------------------------------------
 

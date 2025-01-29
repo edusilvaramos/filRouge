@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Team;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -57,5 +58,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    
+    public function searchUsers(?string $searchTerm, ?string $role, ?string $status, ?Team $team): array
+    {
+        $qb = $this->createQueryBuilder('u');
+    
+        if ($searchTerm) {
+            $qb->andWhere('u.nameUser LIKE :searchTerm OR u.firstName LIKE :searchTerm OR u.email LIKE :searchTerm OR u.service LIKE :searchTerm')
+               ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
 
+        if ($status) {
+            $qb->andWhere('u.status = :status')
+               ->setParameter('status', $status);
+        }
+    
+        if ($team) {
+            $qb->andWhere('u.team = :team')
+               ->setParameter('team', $team);
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
+    
 }

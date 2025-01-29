@@ -11,8 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
 
 class ProjectType extends AbstractType
 {
@@ -49,18 +49,21 @@ class ProjectType extends AbstractType
                 'label' => 'Donnez une description',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('Employe', EntityType::class, [ 
-                'class' => User::class,
-                'choice_label' => 'nameUser',
-                'multiple' => true,
-                'expanded' => true,
-                'label' => 'Employés du Projet',
-                'attr' => [
-                    'class' => 'form-check form-control list-group list-group-flush',
-                    'style' => 'width: 100%; height: 100px; overflow-y: scroll;',
+            
+            ->add('Employe', CollectionType::class, [
+                'entry_type' => TextType::class, // O usuário ainda digita matrículas manualmente
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+                'mapped' => false, // 🔹 Impede o Symfony de mapear diretamente para a entidade
+                'entry_options' => [
+                    'attr' => ['class' => 'form-control mb-2', 'placeholder' => 'Entrer une Matricule']
                 ],
-                'required' => false,
             ])
+        
+
+            
             
         ;
     }
@@ -69,6 +72,7 @@ class ProjectType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Project::class,
+            'csrf_token_id' => 'project_form',
         ]);
     }
 }

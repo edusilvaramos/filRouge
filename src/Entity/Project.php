@@ -44,7 +44,7 @@ class Project
     private Collection $Employe;
 
     #[ORM\Column]
-    private ?bool $isFinish = null;
+    private ?bool $isFinish = false;
 
     public function __construct()
     {

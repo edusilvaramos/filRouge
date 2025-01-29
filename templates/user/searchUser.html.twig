@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="text-center text-primary mb-4">Employees</h1>
+    <!-- Formulário de Pesquisa -->
+    <div class="card p-3 shadow-sm border-0 mb-4 mx-auto" style="max-width: 800px;">
+        {{ form_start(searchForm, {'attr': {'class': 'row g-3'}}) }}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                {{ form_row(searchForm.string, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher un utilisateur...'}}) }}
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                {{ form_row(searchForm.team, {'attr': {'class': 'form-select'}}) }}
+            </div>
+            <div class="col-lg-4 col-md-12 text-center">
+                {{ form_row(searchForm.submit, {'attr': {'class': 'btn btn-primary w-100'}}) }}
+            </div>
+                    <small>Rechercher par Nom/Prenom/email/service/Nom d'utilisateur</small>
+
+        {{ form_end(searchForm) }}
+    </div>
+    <!-- Exibição dos usuários -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4">
+        {% for user in users %}
+            <div class="col">
+                <div class="card shadow-sm border-0 rounded h-100">
+                    <img src="{{ user.photoUser ? asset(user.photoUser) : asset('images/default-project.jpg') }}" 
+                         alt="User Image" 
+                         class="card-img-top img-fluid" 
+                         style="max-height: 200px; object-fit: cover; border-radius: 8px 8px 0 0;">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary fw-bold">{{ user.firstName }}</h5>
+                        <p class="card-text text-muted text-success "><strong class="text-success">Matricule:</strong> {{ user.matricule }}
+                        <br class="m-none"><strong class="text-success m-none">Equipe:</strong> {{ user.team }}</p>
+                        <hr>
+                        <p class="card-text text-muted m-none"><strong class="text-success m-none">Email:</strong> {{ user.email }}
+                        <p class="card-text text-muted m-none"><strong class="text-success m-none">Telephone:</strong> {{ user.telephone }}
+                        {# <div class="mt-auto text-center">
+                            <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-info btn-sm">
+                                <i class="bi bi-eye"></i> Voir
+                            </a>
+                        </div> #}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12 text-center">
+                <p class="text-danger fs-5">Aucun utilisateur trouvé.</p>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- Botão para criar um novo usuário -->
+    <div class="text-center mt-4">
+        <a href="{{ path('app_user_new') }}" class="btn btn-success btn-lg" aria-label="Créer un nouvel utilisateur">
+            <i class="bi bi-plus-circle"></i> Créer un nouvel utilisateur
+        </a>
+    </div>
+</div>
+{% endblock %}
