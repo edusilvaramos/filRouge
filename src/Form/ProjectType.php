@@ -49,22 +49,24 @@ class ProjectType extends AbstractType
                 'label' => 'Donnez une description',
                 'attr' => ['class' => 'form-control']
             ])
-            
             ->add('Employe', CollectionType::class, [
+                // 'entry_type' define o tipo de campo para cada item na coleção.
                 'entry_type' => TextType::class, // O usuário ainda digita matrículas manualmente
                 'allow_add' => true,
                 'allow_delete' => true,
-                'prototype' => true,
-                'by_reference' => false,
-                'mapped' => false, // 🔹 Impede o Symfony de mapear diretamente para a entidade
+                'prototype' => true, // 'prototype' permite que um protótipo de item seja gerado para facilitar a adição de novos elementos via JavaScript.
+                'by_reference' => false, // 'by_reference' indica se a coleção deve ser manipulada por referência ou por cópia.
+                'mapped' => false, // Impede mapear diretamente para a entidade
+                // 'entry_options' define opções para os campos individuais dentro da coleção.
                 'entry_options' => [
-                    'attr' => ['class' => 'form-control mb-2', 'placeholder' => 'Entrer une Matricule']
+                    'attr' => ['class' => 'form-control', 'placeholder' => 'Entrer une Matricule']
                 ],
             ])
-        
 
-            
-            
+
+
+
+
         ;
     }
 

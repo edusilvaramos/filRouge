@@ -1,31 +1,29 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("employe-search");
-    const employeeSelect = document.getElementById("form_employe");
+document.addEventListener('DOMContentLoaded', function () {
+    let collectionHolder = document.querySelector('#employe-fields');
+    let addButton = document.querySelector('#add-employe');
 
-    if (!searchInput || !employeeSelect) {
-        console.error("Campos do formulário não encontrados!");
-        return;
+    addButton.addEventListener('click', function () {
+        let prototype = collectionHolder.dataset.prototype;
+        let index = collectionHolder.children.length;
+        let newField = prototype.replace(/__name__/g, index);
+
+        let div = document.createElement('div');
+        div.classList.add('input-group', 'mb-2', 'employe-entry');
+        div.innerHTML = newField + '<button type="button" class="btn btn-danger  remove-employe">Remover</button>';
+        collectionHolder.appendChild(div);
+
+        attachRemoveEvent(div);
+    });
+
+    function attachRemoveEvent(element) {
+        let removeButton = element.querySelector('.remove-employe');
+        if (removeButton) {
+            removeButton.addEventListener('click', function () {
+                element.remove();
+            });
+        }
     }
 
-    searchInput.addEventListener("input", function () {
-        const query = searchInput.value.trim();
-
-        if (query.length < 2) {
-            employeeSelect.innerHTML = "<option value=''>Select an employee</option>";
-            return;
-        }
-
-        fetch(`/search/employees?q=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                employeeSelect.innerHTML = ""; // Limpa opções
-                data.forEach(employee => {
-                    const option = document.createElement("option");
-                    option.value = employee.id;
-                    option.textContent = employee.nameUser; // Ajuste para o campo correto
-                    employeeSelect.appendChild(option);
-                });
-            })
-            .catch(error => console.error("Erro ao buscar empregados:", error));
-    });
+    document.querySelectorAll('.employe-entry').forEach(attachRemoveEvent);
 });
+

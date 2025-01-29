@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Form;
 
 use App\Entity\Task;
@@ -47,9 +48,9 @@ class TaskType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'placeholder' => 'Sélectionnez une option',
             ])
-            ->add('matricule', TextType::class, [ 
+            ->add('matricule', TextType::class, [
                 'label' => 'Matricule de l\'utilisateur',
-                'mapped' => false, 
+                'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez le matricule'
