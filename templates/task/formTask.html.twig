@@ -25,22 +25,22 @@
 	{{ form_label(form.flagTask, 'État de la tâche', {'label_attr': {'class': 'form-label fw-bold'}}) }}
 	{{ form_widget(form.flagTask, {'attr': {'class': 'form-select'}}) }}
 </div>
+{% if task.employe %}
+	<p class="fw-bold text-primary">La tache est affecte a l'utilisateur :
+		{{  task.employe }}</p>
+	<p class="fw-bold text-primary">Pour modifier l'affectation de la tache, entrez une nouvelle email</p>
+{% endif %}
 
 <div class="mb-3">
-	{{ form_label(form.matricule, 'Matricule de l\'utilisateur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-            {{ form_widget(form.matricule, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le matricule'}}) }}
+	{{ form_label(form.email, 'Matricule de l\'utilisateur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le email'}}) }}
+			{# _______________ teste fotos _______________ #}
+
+			{# _______________ teste fotos _______________ #}
+
             <small>
     <a href="{{ path('app_user_search') }}" class="text-primary" target="_blank" rel="noopener noreferrer">
-        Chercher une Matricule
-    </a>
-</small>
-
-        </div>
-
-        <div class="text-center mt-3">
-            <button type="submit" class="btn btn-primary px-4 py-2">
-                <i class="bi bi-save"></i> {{ button_label|default('Enregistrer') }}
-            </button>
-        </div>
-
-        {{ form_end(form) }}
+		        Chercher un Employe
+</a></small></div><div class="text-center mt-3"><button type="submit" class="btn btn-primary px-4 py-2">
+<i class="bi bi-save"></i>
+{{ button_label|default('Enregistrer') }}</button></div>{{ form_end(form) }}

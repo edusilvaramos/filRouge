@@ -1,35 +1,42 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Project Details
 {% endblock %}
-
 {% block body %}
 	<div class="container mt-5 mb-5">
 		<h1 class="text-center text-primary mb-4">Project Details</h1>
-
 		<div
 			class="card shadow-sm">
 			<!-- Imagem do Projeto -->
 			<img src="{{ project.imageProject ? asset(project.imageProject) : asset('path/to/default-image.jpg') }}" alt="Project Image" class="card-img-top" style="height: 300px; object-fit: cover;">
-
 			<div class="card-body">
 				<div class="d-flex justify-content-between">
 					<h2 class="card-title text-primary">{{ project.projectName }}</h2>
 					<h3>{{ project.isFinish }}</h3>
-					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" %}{% endif %}
-					
-					>{{ flagTaskStatus }}</h3>
+					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ flagTaskStatus }}</h3>
 				</div>
-
-				<p class="card-text">
-					<strong>Description:</strong>
-					{{ project.description }}</p>
-				<p class="card-text">
-					<strong>Start Date:</strong>
-					{{ project.initDate ? project.initDate|date('Y-m-d') : 'N/A' }}<br>
-					<strong>Finish Date:</strong>
-					{{ project.finishDate ? project.finishDate|date('Y-m-d') : 'N/A' }}
-				</p>
+				<div class="row">
+					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
+						<p class="card-text mb-2">
+							<strong>Description:</strong>
+							{{ project.description }}
+						</p>
+						<p>
+							<strong>Start Date:</strong>
+							{{ project.initDate ? project.initDate|date('Y-m-d') : 'N/A' }}<br>
+							<strong>Finish Date:</strong>
+							{{ project.finishDate ? project.finishDate|date('Y-m-d') : 'N/A' }}
+						</p>
+					</div>
+					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
+						<h4>Team Members:</h4>
+						<ul>
+							{% for employes in project.employe %}
+								<li>{{ employes.firstName }}
+									{{ employes.lastName }} ({{employes.email}})</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
 			</div>
 			<a href="{{ path('app_task_index') }}" id="taskButton" class="btn btn-primary me-2 mb-3 w-75 align-self-center" aria-label="Go to Task List">
 				<i class="bi bi-list-task"></i>

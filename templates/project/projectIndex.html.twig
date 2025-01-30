@@ -1,24 +1,23 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Project Index
 {% endblock %}
-
 {% block body %}
-	<div class="container mt-5 mb-5">
+	<div class="container-fluid w-75 mt-5 mb-5">
 		<h1 class="text-center text-primary mb-4">Projects</h1>
 
 		{# {% set uniqueProjects = [] %}
-				{% for task in app.user.tasks %}
-				    {% if task.project and task.project not in uniqueProjects %}
-				        {% set uniqueProjects = uniqueProjects|merge([task.project]) %}
-				    {% endif %}
-				{% endfor %} #}
+						{% for task in app.user.tasks %}
+						    {% if task.project and task.project not in uniqueProjects %}
+						        {% set uniqueProjects = uniqueProjects|merge([task.project]) %}
+						    {% endif %}
+						{% endfor %} #}
 
 		<div
 			class="row g-4">
 			{# {% for project in uniqueProjects %} #}
 			{% for project in app.user.projects %}
-				<div class="col-lg-5 col-md-6 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12">
+
 					<div class="card shadow-sm h-100">
 						<img src="{{ project.imageProject ? asset(project.imageProject) : asset('path/to/default-image.jpg') }}" alt="Project Image" class="card-img-top" style="height: 200px; object-fit: cover;">
 

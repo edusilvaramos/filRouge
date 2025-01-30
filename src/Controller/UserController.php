@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Entity\Team;
 use App\Form\UserType;
 use App\Form\SearchType;
+
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 #[Route('/user')]
 final class UserController extends AbstractController
@@ -134,9 +136,7 @@ final class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             // recuperer le mot de passe du form
             $user = $form->getData();
@@ -178,4 +178,5 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+   
 }

@@ -59,13 +59,9 @@ class ProjectType extends AbstractType
                 'mapped' => false, // Impede mapear diretamente para a entidade
                 // 'entry_options' define opções para os campos individuais dentro da coleção.
                 'entry_options' => [
-                    'attr' => ['class' => 'form-control', 'placeholder' => 'Entrer une Matricule']
+                    'attr' => ['class' => 'form-control', 'placeholder' => 'Entrer un Employe (email)']
                 ],
             ])
-
-
-
-
 
         ;
     }

@@ -48,17 +48,16 @@ class TaskType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'placeholder' => 'Sélectionnez une option',
             ])
-            ->add('matricule', TextType::class, [
+            ->add('email', TextType::class, [
                 'label' => 'Matricule de l\'utilisateur',
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Entrez le matricule'
+                    'placeholder' => 'Entrez l\'email du Employé'
                 ],
                 'required' => true
             ]);
     }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
