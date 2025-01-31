@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
+use App\Repository\ProjectRepository;
+use App\Repository\TeamRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Classes\SessionManager;
@@ -12,7 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 #[Route('/task')]
 final class TaskController extends AbstractController
@@ -34,6 +39,8 @@ final class TaskController extends AbstractController
     public function new(SessionManager $session, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
         $projectId = $session->getProjectId();
+        // Usa a sessão já injetada no construtor
+
         // dd($projectId);
         $project = $entityManager->getRepository(Project::class)->find($projectId);
         // empregados do projeto para associar
@@ -41,16 +48,26 @@ final class TaskController extends AbstractController
         // dd($employes);
 
         $task = new Task();
-        $form = $this->createForm(TaskType::class, $task);
+        $form = $this->createForm(TaskType::class, $task, [
+            'project' => $project
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
             $task->setProject($project);
-            $email = $form->get('email')->getData();
+            $sessionEmail = $session->getEmailTask();
+
+            $selectedUser = $form->get('employe')->getData();
+            $task->setEmploye($selectedUser);
+
+            // dd($sessionEmail);
+            $email = $sessionEmail;
+            // dd($email);
+
             // dd($request);
-            $user = $userRepository->findOneBy(['email' => $email]);
-            $task->setEmploye($user);
+            // $user = $userRepository->findOneBy(['email' => $email]);
+            // $task->setEmploye($user);
 
             $entityManager->persist($task);
             $entityManager->flush();
@@ -87,21 +104,29 @@ final class TaskController extends AbstractController
         $employe = $task->getEmploye();
         $email = $employe ? $employe->getEmail() : null; // Verifica se há um empregado antes de pegar a matrícula
         // dd($email);
-        $form = $this->createForm(TaskType::class, $task);
+        $projectId = $session->getProjectId();
+        // Usa a sessão já injetada no construtor
+
+        // dd($projectId);
+        $project = $entityManager->getRepository(Project::class)->find($projectId);
+        $form = $this->createForm(TaskType::class, $task, [
+            'project' => $project
+        ]);
         // Definir a matrícula no campo correto do formulário, caso o empregado exista
-        if ($email) {
-            $form->get('email')->setData($email);
-        }
+
         $form->handleRequest($request);
         $projectId = $session->getProjectId();
         $project = $entityManager->getRepository(Project::class)->find($projectId);
         $employes = $project->getEmploye();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            $user = $userRepository->findOneBy(['email' => $email]);
+            $sessionEmail = $session->getEmailTask();
+
+            $selectedUser = $form->get('employe')->getData();
+            $task->setEmploye($selectedUser);
+
             // Associar o empregado à tarefa
-            $task->setEmploye($user);
+
 
             // Salvar no banco
             $entityManager->flush();

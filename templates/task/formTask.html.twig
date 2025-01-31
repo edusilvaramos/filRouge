@@ -1,5 +1,6 @@
 {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
 
+
 <div class="mb-3">
 	{{ form_label(form.title, 'Titre de la tâche', {'label_attr': {'class': 'form-label fw-bold'}}) }}
 	{{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
@@ -28,36 +29,36 @@
 {% if task.employe %}
 	<p class="fw-bold text-primary">La tache est affecte a l'utilisateur :
 		{{  task.employe }}</p>
-		<img src="{{ asset(task.employe.photoUser) }}" alt="{{ task.employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-	<p class="fw-bold text-primary">Pour modifier l'affectation de la tache, entrez une nouvelle email</p>
+	<img src="{{ asset(task.employe.photoUser) }}" alt="{{ task.employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+	<p class="fw-bold text-primary">Pour modifier l'affectation de la tache, choissez un autre employé</p>
 {% endif %}
-{# _______________  fotos _______________ #}
 <hr>
-{% if employe %}
-<h3 class="fw-bold text-primary">Liste des employé du Project</h3>
-	<div class="d-flex flex-wrap justify-content-center align-items-center mt-3">
-		{% for employe in employes %}
-			<div class="me-3 mb-3 d-flex flex-column align-items-center">
-				<button type="button" class="btn btn-none " value="{{ employe.email }}"><img src="{{ asset(employe.photoUser) }}" alt="{{ employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-					<p class="mt-2 fw-bold">
-						{{ employe.firstName ?: 'Unknown' }}
-						({{ employe.email ?: 'Unknown' }})
-					</p>
-				</button>
-			</div>
-		{% endfor %}
-	</div>
-{% endif %}
-{# _______________  fotos _______________ #}
+<h4 class="fw-bold text-primary text-center">Selectionner un employé pour affecter la tâche</h4>
 
-<div class="mb-3">
-	{{ form_label(form.email, 'Matricule de l\'utilisateur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le email'}}) }}
+{% for choice in form.employe %} 
+    <label class="d-flex align-items-center gap-3 p-2 rounded shadow-sm employe-label">
+        <input type="radio" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}" 
+               {% if choice.vars.checked %} checked {% endif %} class="d-none">
+        <div class="employe-photo">
+            <img src="{{ asset(choice.vars.attr['data-photo']|default('default.jpg')) }}" 
+                 alt="Foto de {{ choice.vars.label }}" class="rounded-circle">
+        </div>
+        <div class="employe-info">
+    <strong class="d-block">{{ choice.vars.label|split('@')|first }}</strong>
+    <small class="text-muted">{{ choice.vars.label }}</small>
+</div>
 
-            <small>
-    <a href="{{ path('app_user_search') }}" class="text-primary" target="_blank" rel="noopener noreferrer">
-		        Chercher un Employe
-</a></small></div><div class="text-center mt-3"><button type="submit" class="btn btn-primary px-4 py-2">
-<i class="bi bi-save"></i>
-{{ button_label|default('Enregistrer') }}</button></div>
+    </label>
+{% endfor %}
+
+<hr>
+<link rel="stylesheet" href="{{asset('assets/css/email.css')}}">
+<div class="text-center mt-3">
+	<button type="submit" class="btn btn-primary px-4 py-2">
+		<i class="bi bi-save"></i>
+		{{ button_label|default('Enregistrer') }}</button>
+</div>
+{{ form_widget(form.employe, {'attr': {'hidden': 'hidden'}}) }}
+
+
 {{ form_end(form) }}

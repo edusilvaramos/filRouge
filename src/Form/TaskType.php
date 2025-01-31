@@ -3,17 +3,22 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Doctrine\ORM\EntityRepository;
+
 
 class TaskType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $project = $options['project'];
         $builder
             ->add('title', TextType::class, [
                 'label' => 'Titre de la tâche',
@@ -48,15 +53,27 @@ class TaskType extends AbstractType
                 'attr' => ['class' => 'form-select'],
                 'placeholder' => 'Sélectionnez une option',
             ])
-            ->add('email', TextType::class, [
-                'label' => 'Entrez l\'email du Employé',
-                'mapped' => false,
+            ->add('employe', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'email', // Ou outro atributo relevante
+                'choice_attr' => function (User $user) {
+                    return ['data-photo' => $user->getPhotoUser() ?? 'default.jpg'];
+                },
+                'choice_value' => 'id',
+                'expanded' => true,
+                'multiple' => false,
                 'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Entrez l\'email du Employé'
+                    'class' => ' hidden'
+
                 ],
-                'required' => true
+                'query_builder' => function (EntityRepository $er) use ($project) {
+                    return $er->createQueryBuilder('u')
+                        ->innerJoin('u.projects', 'p') // Ajuste conforme a relação da entidade
+                        ->where('p.id = :project')
+                        ->setParameter('project', $project->getId());
+                },
             ])
+
         ;
     }
     public function configureOptions(OptionsResolver $resolver): void
@@ -64,6 +81,7 @@ class TaskType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Task::class,
             'csrf_token_id' => 'task_form',
+            'project' => null
         ]);
     }
 }
