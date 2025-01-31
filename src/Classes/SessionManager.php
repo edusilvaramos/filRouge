@@ -2,7 +2,6 @@
 
 namespace App\Classes;
 
-
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class SessionManager

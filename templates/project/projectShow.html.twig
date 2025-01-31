@@ -14,12 +14,13 @@
 					<h3>{{ project.isFinish }}</h3>
 					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ flagTaskStatus }}</h3>
 				</div>
-				<div class="row">
-					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
-						<p class="card-text mb-2">
+				<p class="card-text mb-2">
 							<strong>Description:</strong>
 							{{ project.description }}
 						</p>
+				<div class="row">
+					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
+						
 						<p>
 							<strong>Start Date:</strong>
 							{{ project.initDate ? project.initDate|date('Y-m-d') : 'N/A' }}<br>
@@ -27,15 +28,25 @@
 							{{ project.finishDate ? project.finishDate|date('Y-m-d') : 'N/A' }}
 						</p>
 					</div>
-					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
-						<h4>Team Members:</h4>
-						<ul>
-							{% for employes in project.employe %}
-								<li>{{ employes.firstName }}
-									{{ employes.lastName }} ({{employes.email}})</li>
+				</div>
+				<div class="mb-3 d-flex flex-column align-items-center">
+					<h4 class="text-primary fw-bold mb-3">Team Members:</h4>
+
+					{% if project.employe is not empty %}
+						<div class="d-flex flex-wrap justify-content-center align-items-center">
+							{% for employe in project.employe %}
+								<div class="me-3 mb-3 d-flex flex-column align-items-center">
+									<img src="{{ asset(employe.photoUser) }}" alt="{{ employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+									<p class="mt-2 fw-bold">
+										{{ employe.firstName ?: 'Unknown' }}
+										({{ employe.email ?: 'Unknown' }})
+									</p>
+								</div>
 							{% endfor %}
-						</ul>
-					</div>
+						</div>
+					{% else %}
+						<p class="text-muted">Il n'y a aucun employé pour ce projet.</p>
+					{% endif %}
 				</div>
 			</div>
 			<a href="{{ path('app_task_index') }}" id="taskButton" class="btn btn-primary me-2 mb-3 w-75 align-self-center" aria-label="Go to Task List">

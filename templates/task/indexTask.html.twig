@@ -4,6 +4,12 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success fade-out position-absolute m-3" style="transition: opacity 0.5s ease-in-out;">
+			{{ message }}
+		</div>
+	{% endfor %}
+	
 	<div class="container">
 		<h1 class="text-center text-success">Tasks for Project:
 			{{ project.projectName }}</h1>

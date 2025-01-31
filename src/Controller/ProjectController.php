@@ -70,7 +70,8 @@ final class ProjectController extends AbstractController
         return $this->render('project/projectNew.html.twig', [
             'project' => $project,
             'form' => $form,
-            'employesNames' => null
+            'employesNames' => null,
+            'originalImage' => null
         ]);
     }
     //  colocar qui aparte para ir buscar os useres do project ---------------------------------------------
@@ -109,7 +110,15 @@ final class ProjectController extends AbstractController
         // Obter lista de empregados antigos
         $oldEmployes = $project->getEmploye();
         // Obter lista de nomes e matrículas dos empregados atuais
-        $employesNames = $oldEmployes->map(fn($employe) => $employe->getEmail())->toArray();
+        $employesNames = $oldEmployes->map(function ($employe) {
+            return [
+                'id'    => $employe->getId(),
+                'name'  => $employe->getNameUser(),
+                'image' => $employe->getPhotoUser(),
+                'email' => $employe->getEmail()
+            ];
+        })->toArray();
+
         $employes = $oldEmployes->map(fn($employe) => $employe->getEmail())->toArray();
         // Criar formulário
         $form = $this->createForm(ProjectType::class, $project);
@@ -118,6 +127,7 @@ final class ProjectController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $chamin = "assets/images/project";
             $file = $form->get('imageProject')->getData();
+            $title = $form->get('projectName')->getData();
             // Atualizar imagem, se necessário
             if ($file) {
                 $file->move($chamin, $file->getClientOriginalName());
@@ -145,13 +155,14 @@ final class ProjectController extends AbstractController
             }
             // Salvar alterações no banco de dados
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le Project ' .   $title . ' a editée avec succéss!');
             return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('project/projectEdit.html.twig', [
             'project' => $project,
             'form' => $form,
-            'employesNames' => $employesNames
+            'employesNames' => $employesNames,
+            'originalImage' => $originalImage
         ]);
     }
 

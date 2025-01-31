@@ -2,19 +2,16 @@
 {% block title %}Project Index
 {% endblock %}
 {% block body %}
+
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success fade-out position-absolute m-3" style="transition: opacity 0.5s ease-in-out;">
+			{{ message }}
+		</div>
+	{% endfor %}
+	
 	<div class="container-fluid w-75 mt-5 mb-5">
 		<h1 class="text-center text-primary mb-4">Projects</h1>
-
-		{# {% set uniqueProjects = [] %}
-						{% for task in app.user.tasks %}
-						    {% if task.project and task.project not in uniqueProjects %}
-						        {% set uniqueProjects = uniqueProjects|merge([task.project]) %}
-						    {% endif %}
-						{% endfor %} #}
-
-		<div
-			class="row g-4">
-			{# {% for project in uniqueProjects %} #}
+		<div class="row g-4">
 			{% for project in app.user.projects %}
 				<div class="col-lg-4 col-md-6 col-sm-12">
 

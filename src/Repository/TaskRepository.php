@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Project;
+use Doctrine\DBAL\LockMode;
 
 /**
  * @extends ServiceEntityRepository<Task>
@@ -40,4 +42,15 @@ class TaskRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findByProject(Project $project): array
+    {
+        // construtor de queries
+        return $this->createQueryBuilder('tasks')  //alias + seguro 
+            ->where('tasks.Project = :project') // filtro de busqueda, como o que eu faço no php puro
+            ->setParameter('project', $project)
+            // Cria e pega a Query
+            ->getQuery()
+            ->getResult() // retorna os resilts em formato array 
+        ;
+    }
 }

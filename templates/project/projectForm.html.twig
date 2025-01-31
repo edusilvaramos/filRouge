@@ -1,10 +1,14 @@
 {{ form_start(form, { 'attr': { 'class': 'meu-formulario' } }) }}
 
+{% if originalImage %}
+	<img src="{{ asset(originalImage) }}" alt="{{ originalImage }}" class="card-img-top mb-3 mx-auto " style="object-fit: cover;">
+{% endif %}
 <div class="mb-3">
 	{{ form_label(form.projectName, 'Nom du Projet', { 'label_attr': { 'class': 'form-label' } }) }}
 	{{ form_widget(form.projectName, { 'attr': { 'class': 'form-control' } }) }}
 	{{ form_errors(form.projectName) }}
 </div>
+
 <div class="row">
 	<div class="col-md-6 mb-3">
 		<div>
@@ -21,25 +25,31 @@
 		</div>
 	</div>
 </div>
+
 <div class="mb-3">
 	{{ form_label(form.imageProject, 'Photo', { 'label_attr': { 'class': 'form-label' } }) }}
 	{{ form_widget(form.imageProject, { 'attr': { 'class': 'form-control' } }) }}
 	{{ form_errors(form.imageProject) }}
 </div>
+
 <div class="mb-3">
 	{{ form_label(form.description, 'Donnez une description', { 'label_attr': { 'class': 'form-label' } }) }}
 	{{ form_widget(form.description, { 'attr': { 'class': 'form-control', 'rows': 4 } }) }}
 	{{ form_errors(form.description) }}
 </div>
-{# -------------------------------------------------------------------------------- #}
+<h5>Employé(s) deja affecté au projet</h5>
 {% if employesNames %}
-	{% for employesNames in employesNames %}
-		<p>{{ employesNames }}
-		</p>
-	{% endfor %}
+	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 my-4">
+		{% for employe in employesNames %}
+			<div class="col d-flex flex-column align-items-center text-center">
+				<img src="{{ asset(employe.image) }}" alt="{{ employe.name }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+				<p class="mt-2 fw-bold">{{ employe.name }} ({{ employe.email }} )</p>
+			</div>
+		{% endfor %}
+	</div>
 {% endif %}
-{# -------------------------------------------------------------------------------- #}
 <div class="mb-3">
+<hr>
 	{{ form_label(form.Employe, 'Affecter des/un employé(es)', { 'label_attr': { 'class': 'form-label' } }) }}
 	<div id="employe-fields" data-prototype="{{ form_widget(form.Employe.vars.prototype)|e('html_attr') }}">
 		{% for employe in form.Employe %}
@@ -52,15 +62,18 @@
 	<button type="button" class="btn btn-sm btn-primary mt-2" id="add-employe">Adicionar</button>
 	{{ form_errors(form.Employe) }}
 </div>
+
 <small>
 	<a href="{{ path('app_user_search') }}" class="text-primary" target="_blank" rel="noopener noreferrer">
 		Chercher un Employe
 	</a>
 </small>
+
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
 let collectionHolder = document.querySelector('#employe-fields');
 let addButton = document.querySelector('#add-employe');
+
 addButton.addEventListener('click', function () {
 let prototype = collectionHolder.dataset.prototype;
 let index = collectionHolder.children.length;
@@ -68,11 +81,12 @@ let newField = prototype.replace(/__name__/g, index);
 
 let div = document.createElement('div');
 div.classList.add('input-group', 'mb-2', 'employe-entry');
-div.innerHTML = newField + '<button type="button" class="btn btn-danger  remove-employe">Remover</button>';
+div.innerHTML = newField + '<button type="button" class="btn btn-danger remove-employe">Remover</button>';
 collectionHolder.appendChild(div);
 
 attachRemoveEvent(div);
 });
+
 function attachRemoveEvent(element) {
 let removeButton = element.querySelector('.remove-employe');
 if (removeButton) {
@@ -81,12 +95,16 @@ element.remove();
 });
 }
 }
+
 document.querySelectorAll('.employe-entry').forEach(attachRemoveEvent);
 });
 </script>
+
 <div class="mt-3">
 	<button class="btn btn-primary">
 		<i class="bi bi-save"></i>
-		{{ button_label|default('Enregistrer') }}</button>
+		{{ button_label|default('Enregistrer') }}
+	</button>
 </div>
+
 {{ form_end(form) }}
