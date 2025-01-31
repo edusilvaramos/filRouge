@@ -47,7 +47,7 @@ final class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
             $task->setProject($project);
-            $email = $form->get('employe')->getData();
+            $email = $form->get('email')->getData();
             // dd($request);
             $user = $userRepository->findOneBy(['email' => $email]);
             $task->setEmploye($user);

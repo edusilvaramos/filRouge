@@ -28,11 +28,13 @@
 {% if task.employe %}
 	<p class="fw-bold text-primary">La tache est affecte a l'utilisateur :
 		{{  task.employe }}</p>
+		<img src="{{ asset(task.employe.photoUser) }}" alt="{{ task.employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
 	<p class="fw-bold text-primary">Pour modifier l'affectation de la tache, entrez une nouvelle email</p>
 {% endif %}
 {# _______________  fotos _______________ #}
 <hr>
 {% if employe %}
+<h3 class="fw-bold text-primary">Liste des employé du Project</h3>
 	<div class="d-flex flex-wrap justify-content-center align-items-center mt-3">
 		{% for employe in employes %}
 			<div class="me-3 mb-3 d-flex flex-column align-items-center">
@@ -49,8 +51,8 @@
 {# _______________  fotos _______________ #}
 
 <div class="mb-3">
-	{{ form_label(form.employe, 'Matricule de l\'utilisateur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-            {{ form_widget(form.employe, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le email'}}) }}
+	{{ form_label(form.email, 'Matricule de l\'utilisateur', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le email'}}) }}
 
             <small>
     <a href="{{ path('app_user_search') }}" class="text-primary" target="_blank" rel="noopener noreferrer">
