@@ -1,6 +1,57 @@
 <div class="col-12">
 	{{ form_start(form) }}
-	{{ form_widget(form, {'attr': {'class': 'form-control mb-3'}}) }}
-	<button class="btn btn-primary w-100 mt-3">{{ button_label|default('Save') }}</button>
-	{{ form_end(form) }}
-</div>
+
+	<div class="mb-3">
+		{{ form_widget(form.matricule) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_widget(form.email, {'attr': {'onblur': 'checkEmail()','id': 'email'}}) }}
+		<p>
+			<small class="text-danger d-none" id="emailError">L'utilisateur est deja cadastre</small>
+		</p>
+
+		<div class="mb-3">
+			{{ form_widget(form.password.first) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.password.second) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.firstName) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.lastName) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.birthday) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.telephone) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.team) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.service) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.nameUser) }}
+		</div>
+
+		<div class="mb-3">
+			{{ form_widget(form.photoUser) }}
+		</div>
+
+		<button class="btn btn-primary w-100 mt-3">{{ button_label|default('Save') }}</button>
+
+		{{ form_end(form) }}
+	</div>
