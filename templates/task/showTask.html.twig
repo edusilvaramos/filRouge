@@ -5,55 +5,79 @@
 
 {% block body %}
 	<div class="container my-4">
-		<h1 class="text-center mb-4 text-primary">Tache Details</h1>
+		<h1 class="text-center mb-4 text-primary">Task Details</h1>
 
 		<div class="card shadow-sm">
 			<div class="card-body">
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<th scope="row">ID</th>
-							<td>{{ task.id }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Title</th>
-							<td>{{ task.title }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Description</th>
-							<td>{{ task.descriptionTask }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Start Date</th>
-							<td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'Not set' }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Finish Date</th>
-							<td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : 'Not set' }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Flag</th>
-							<td>{{ task.flagTask }}</td>
-						</tr>
-						<tr>
-							<th scope="row">Employee Affected</th>
-							<td>{{ task.employe }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="border p-4 rounded">
+					<h3 class="fw-bold text-primary text-center">{{ task.title }}</h3>
+					<hr>
+
+					<div class="mb-3">
+						<p class="fw-bold">
+							<i class="bi bi-file-text"></i>
+							Description:</p>
+						<p class="text-muted fs-6">{{ task.descriptionTask }}</p>
+					</div>
+
+					<div class="row mb-3 bg-light p-2">
+						<div class="col-md-6 d-flex flex-column align-items-center">
+							<p class="fw-bold">
+								<i class="bi bi-calendar-event"></i>
+								Date de debut</p>
+							<p>{{ task.initDate ? task.initDate|date('d-m-Y') : 'Not set' }}</p>
+						</div>
+						<div class="col-md-6 d-flex flex-column align-items-center">
+							<p class="fw-bold">
+								<i class="bi bi-calendar-check"></i>
+								Date de fin</p>
+							{% if task.finishDate > date('now') %}
+								<p class="fw-bold text-danger">{{ task.finishDate ? task.finishDate|date('d-m-Y') : 'Not set' }}</p>
+							{% else %}
+								<p>{{ task.finishDate ? task.finishDate|date('d-m-Y') : 'Not set' }}</p>
+							{% endif %}
+						</div>
+					</div>
+					<div class="mb-3 fs-6">
+						<p class="fw-bold 5">
+							<i class="bi bi-check-circle"></i>
+							Status:</p>
+						<h5 class="text-muted">
+
+						{% if task.flagTask == 'completed' %}
+						<span class="badge bg-success">Terminé
+					{% elseif task.flagTask == 'in_progress' %}
+						<span class="badge bg-warning text-dark">Non terminé
+					{% else %}
+						<span class="badge bg-danger">Non commencé
+					</span>{% endif %}
+				</h5>
+			</div>
+			<hr>
+			<div class="mb-3">
+				<p class="fw-bold">
+					<i class="bi bi-person"></i>
+					Employee affecteé</p>
+				<div class="d-flex align-items-center gap-3">
+					<img src="{{ asset(task.Employe.photoUser) }}" alt="{{ task.Employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle border shadow-sm" style="width:60px; height: 60px; object-fit: cover;">
+					<div>
+						<p class="fw-bold mb-1">
+							{{ task.Employe.firstName ?: 'Unknown' }}
+						</p>
+						<p class="text-muted">{{ task.Employe.email ?: 'Unknown' }}</p>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<div class="d-flex justify-content-center mt-4 gap-2">
-			<a href="{{ path('app_task_index') }}" class="btn btn-secondary">
-				<i class="bi bi-arrow-left-circle"></i>
-				Back to list
-			</a>
-			<a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-primary">
-				<i class="bi bi-pencil-square"></i>
-				Edit
-			</a>
-			{{ include('task/deleteTask.html.twig') }}
-		</div>
 	</div>
-{% endblock %}
+</div>
+<div class="d-flex justify-content-center mt-4 gap-3">
+	<a href="{{ path('app_task_index') }}" class="btn btn-outline-secondary">
+		<i class="bi bi-arrow-left-circle"></i>
+		Back to list
+	</a>
+	<a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-primary">
+		<i class="bi bi-pencil-square"></i>
+		Edit
+	</a>
+	{{ include('task/deleteTask.html.twig') }}</div></div>{% endblock %}

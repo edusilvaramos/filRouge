@@ -1,7 +1,5 @@
 {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-
-
-<div class="mb-3">
+<div class="mb-3 ">
 	{{ form_label(form.title, 'Titre de la tâche', {'label_attr': {'class': 'form-label fw-bold'}}) }}
 	{{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
 </div>
@@ -17,7 +15,7 @@
 		{{ form_widget(form.initDate, {'attr': {'class': 'form-control'}}) }}
 	</div>
 	<div class="col-md-6 mb-3">
-		{{ form_label(form.finishDate, 'Date de fin', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+		{{ form_label(form.finishDate, 'Date prevue de fin', {'label_attr': {'class': 'form-label fw-bold'}}) }}
 		{{ form_widget(form.finishDate, {'attr': {'class': 'form-control'}}) }}
 	</div>
 </div>
@@ -35,20 +33,18 @@
 <hr>
 <h4 class="fw-bold text-primary text-center">Selectionner un employé pour affecter la tâche</h4>
 
-{% for choice in form.employe %} 
-    <label class="d-flex align-items-center gap-3 p-2 rounded shadow-sm employe-label">
-        <input type="radio" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}" 
-               {% if choice.vars.checked %} checked {% endif %} class="d-none">
-        <div class="employe-photo">
-            <img src="{{ asset(choice.vars.attr['data-photo']|default('default.jpg')) }}" 
-                 alt="Foto de {{ choice.vars.label }}" class="rounded-circle">
-        </div>
-        <div class="employe-info">
-    <strong class="d-block">{{ choice.vars.label|split('@')|first }}</strong>
-    <small class="text-muted">{{ choice.vars.label }}</small>
-</div>
+{% for choice in form.employe %}
+	<label class="d-flex align-items-center gap-3 p-2 rounded shadow-sm employe-label">
+		<input type="radio" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}" {% if choice.vars.checked %} checked {% endif %} class="d-none">
+		<div class="employe-photo">
+			<img src="{{ asset(choice.vars.attr['data-photo']|default('default.jpg')) }}" alt="Foto de {{ choice.vars.label }}" class="rounded-circle">
+		</div>
+		<div class="employe-info">
+			<strong class="d-block">{{ choice.vars.label|split('@')|first }}</strong>
+			<small class="text-muted">{{ choice.vars.label }}</small>
+		</div>
 
-    </label>
+	</label>
 {% endfor %}
 
 <hr>

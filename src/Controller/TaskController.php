@@ -5,9 +5,6 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use App\Repository\ProjectRepository;
-use App\Repository\TeamRepository;
-use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Classes\SessionManager;
@@ -15,9 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use IntlChar;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 #[Route('/task')]
 final class TaskController extends AbstractController
@@ -36,11 +33,9 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
-    public function new(SessionManager $session, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    public function new(SessionManager $session, Request $request, EntityManagerInterface $entityManager): Response
     {
         $projectId = $session->getProjectId();
-        // Usa a sessão já injetada no construtor
-
         // dd($projectId);
         $project = $entityManager->getRepository(Project::class)->find($projectId);
         // empregados do projeto para associar
@@ -71,6 +66,8 @@ final class TaskController extends AbstractController
 
             $entityManager->persist($task);
             $entityManager->flush();
+            $this->addFlash('success', 'La tâche a éte crée avec succéss!');
+
             return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
             // função de envio de e-mail
             // $this->sendEmail($mailer, $user);
@@ -99,7 +96,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager, UserRepository $userRepository, SessionManager $session): Response
+    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager, SessionManager $session): Response
     {
         $employe = $task->getEmploye();
         $email = $employe ? $employe->getEmail() : null; // Verifica se há um empregado antes de pegar a matrícula

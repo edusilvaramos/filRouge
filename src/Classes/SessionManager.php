@@ -27,8 +27,10 @@ class SessionManager
     {
         $this->session->remove('project_id');
     }
+
     public function getEmailTask(): ?string
     {
         return $this->session->get('task_email');
     }
 }
+
