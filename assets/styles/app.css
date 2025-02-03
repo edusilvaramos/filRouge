@@ -1,3 +1,4 @@
 
-@import "./bootstrap.min.css";  
-@import "./style.css";  
+@import "../../public/assets/css/bootstrap.min.css";  
+@import "../../public/assets/css/style.css";  
+@import "../../public/assets/css/email.css";  

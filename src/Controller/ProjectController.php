@@ -84,6 +84,7 @@ final class ProjectController extends AbstractController
 
         $session->setProjectId($id);
 
+
         $flagTaskStatus = 'Pending';
         $employe = $userRepository->findAll();
         foreach ($tasks as $task) {
