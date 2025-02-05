@@ -15,12 +15,12 @@
 					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ flagTaskStatus }}</h3>
 				</div>
 				<p class="card-text mb-2">
-							<strong>Description:</strong>
-							{{ project.description }}
-						</p>
+					<strong>Description:</strong>
+					{{ project.description }}
+				</p>
 				<div class="row">
 					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
-						
+
 						<p>
 							<strong>Start Date:</strong>
 							{{ project.initDate ? project.initDate|date('Y-m-d') : 'N/A' }}<br>
@@ -31,7 +31,6 @@
 				</div>
 				<div class="mb-3 d-flex flex-column align-items-center">
 					<h4 class="text-primary fw-bold mb-3">Team Members:</h4>
-
 					{% if project.employe is not empty %}
 						<div class="d-flex flex-wrap justify-content-center align-items-center">
 							{% for employe in project.employe %}
@@ -43,7 +42,26 @@
 									</p>
 								</div>
 							{% endfor %}
+
 						</div>
+
+						{#  ---------------------- chat ----------------------  #}
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Private chat</a>
+
+						<div class="nav-item dropdown">
+							<div class="dropdown-menu fs-5">
+								{% for employe in project.employe %}
+									<a class="dropdown-item" href="{{ path('app_conversation', {'recipients': employe.id}) }}">
+										{{ employe.firstName | default('Unknown') }}
+									</a>
+								{% endfor %}
+							</div>
+						</div>
+
+
+						{# ---------------------- #}
+
+
 					{% else %}
 						<p class="text-muted">Il n'y a aucun employé pour ce projet.</p>
 					{% endif %}
@@ -71,4 +89,3 @@
 
 	</div>
 {% endblock %}
-

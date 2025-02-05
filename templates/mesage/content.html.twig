@@ -1,0 +1,14 @@
+{% if app.user.id == mesage.author.id %}
+    <p class="message small p-2 me-3 mb-2 text-white rounded-3 text-start"
+       data-bs-toggle="tooltip"
+       data-bs-title="{{ mesage.creatadAt|date('d/m/Y H:i') }}">
+        {{ mesage.content }}
+    </p>
+{% else %}
+    <p class="message message-end small p-2 me-3 mb-1 text-white rounded-3"
+       data-bs-toggle="tooltip"
+       data-bs-title="{{ mesage.creatadAt|date('d/m/Y H:i') }}">
+        {{ mesage.content }}
+    </p>
+{% endif %}
+

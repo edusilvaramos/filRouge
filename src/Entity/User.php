@@ -80,6 +80,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'employe')]
     private Collection $task;
+
+    /**
+     * @var Collection<int, Conversations>
+     */
+    #[ORM\ManyToMany(targetEntity: Conversations::class, mappedBy: 'users')]
+    private Collection $conversations;
+
+    /**
+     * @var Collection<int, Mesage>
+     */
+    #[ORM\OneToMany(targetEntity: Mesage::class, mappedBy: 'author')]
+    private Collection $mesages;
     
 
    
@@ -88,6 +100,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->addresses = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->task = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
+        $this->mesages = new ArrayCollection();
     }
 
     public function __toString()
@@ -359,6 +373,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($task->getEmploye() === $this) {
                 $task->setEmploye(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversations>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversations $conversation): static
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversations $conversation): static
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            $conversation->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mesage>
+     */
+    public function getMesages(): Collection
+    {
+        return $this->mesages;
+    }
+
+    public function addMesage(Mesage $mesage): static
+    {
+        if (!$this->mesages->contains($mesage)) {
+            $this->mesages->add($mesage);
+            $mesage->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMesage(Mesage $mesage): static
+    {
+        if ($this->mesages->removeElement($mesage)) {
+            // set the owning side to null (unless already changed)
+            if ($mesage->getAuthor() === $this) {
+                $mesage->setAuthor(null);
             }
         }
 

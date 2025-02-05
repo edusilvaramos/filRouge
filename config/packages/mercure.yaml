@@ -1,0 +1,11 @@
+mercure:
+    hubs:
+        default:
+            url: '%env(MERCURE_URL)%'
+            public_url: '%env(MERCURE_PUBLIC_URL)%'
+            jwt:
+                secret: '%env(MERCURE_JWT_SECRET)%'
+                publish:
+                    - '*'   # Permite publicação para todos os tópicos
+                subscribe:
+                    - '*'   # Permite assinatura para todos os tópicos
