@@ -6,7 +6,6 @@ use App\Entity\Task;
 use App\Entity\Project;
 use App\Entity\Address;
 use App\Entity\Team;
-use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -29,7 +28,7 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         $url = $this->adminUrlGenerator
-            ->setController(TaskCrudController::class)
+            ->setController(UserCrudController::class)
             ->generateUrl();
         return $this->redirect($url);
     }
