@@ -42,8 +42,6 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-
-
         configMenuItems:
         yield MenuItem::section('Gestion projets');
         yield MenuItem::linkToDashboard('Menu', 'fa fa-home');

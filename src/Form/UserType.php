@@ -80,7 +80,7 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'attr' => ['class' => 'form-control'],
             ])
-            
+
 
             ->add('service', TextType::class, [
                 'label' => 'Service',
