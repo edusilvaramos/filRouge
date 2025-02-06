@@ -15,7 +15,7 @@ class Team
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true)] // Adicionado 'unique: true' para garantir unicidade do nome
+    #[ORM\Column(length: 255, unique: true)] 
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'team', targetEntity: User::class)]
