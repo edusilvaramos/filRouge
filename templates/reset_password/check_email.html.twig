@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Email Sent
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5 w-75 ">
+		<p>
+			Si une conte correspondant a votre email existe, alors un email a été envoyé qui contient un lien que vous pouvez utiliser pour recuperer votre
+			            password. Le link va expirer dans
+			{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+		</p>
+		<p class="text">
+			Si vous ne recevez pas d'email, veuillez verifier votre dossier spam ou
+			<a href="{{ path('app_forgot_password_request') }}">Réessayer</a>.</p>
+	</div>
+{% endblock %}

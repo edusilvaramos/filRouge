@@ -15,12 +15,12 @@
 					<h3 {% if flagTaskStatus =='Le Project est Termine' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ flagTaskStatus }}</h3>
 				</div>
 				<p class="card-text mb-2">
-							<strong>Description:</strong>
-							{{ project.description }}
-						</p>
+					<strong>Description:</strong>
+					{{ project.description }}
+				</p>
 				<div class="row">
 					<div class="col-md-6 col-sm-12 mb-3 d-flex flex-column">
-						
+
 						<p>
 							<strong>Start Date:</strong>
 							{{ project.initDate ? project.initDate|date('Y-m-d') : 'N/A' }}<br>
@@ -36,7 +36,7 @@
 						<div class="d-flex flex-wrap justify-content-center align-items-center">
 							{% for employe in project.employe %}
 								<div class="me-3 mb-3 d-flex flex-column align-items-center">
-									<img src="{{ asset(employe.photoUser) }}" alt="{{ employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+									<img {% if employe.photoUser %} src="{{ asset(employe.photoUser)}}" {% else %} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7vB-49_BT-dirwttYZaeE_VByjlQ3raVJZg&s" {% endif %} alt="{{ employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
 									<p class="mt-2 fw-bold">
 										{{ employe.firstName ?: 'Unknown' }}
 										({{ employe.email ?: 'Unknown' }})
@@ -71,4 +71,3 @@
 
 	</div>
 {% endblock %}
-

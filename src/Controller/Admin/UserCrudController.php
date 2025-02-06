@@ -11,7 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -27,9 +28,12 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+
+        $password = "password";
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('email'),
+            TextField::new('password'),
             ChoiceField::new('roles')
                 ->setChoices([
                     'User' => 'ROLE_USER',
@@ -37,7 +41,6 @@ class UserCrudController extends AbstractCrudController
                     'Manager' => 'ROLE_MANAGER',
                 ])
                 ->allowMultipleChoices(),
-
             TextField::new('matricule'),
             TextField::new('firstName'),
             TextField::new('lastName'),
@@ -46,6 +49,9 @@ class UserCrudController extends AbstractCrudController
             TextField::new('service'),
             TextField::new('nameUser'),
             ImageField::new('photoUser')
+                ->setUploadDir('public/assets/images/user/')
+                ->setUploadedFileNamePattern('assets/images/user/' . '[randomhash].[extension]')
+                ->setRequired(false),
         ];
     }
 }

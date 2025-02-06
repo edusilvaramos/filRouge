@@ -1,9 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {# para redefinir a nar e mostrar as infos para un usr nao logado #}
-{% block nav %}
-
-{% endblock %}
+{% block nav %}{% endblock %}
 {% block body %}
 	<div class="container mt-5 w-75">
 		<form method="post" action="{{ path('app_login') }}">
@@ -14,22 +12,20 @@
 			<h1 class="h3 mt-3 font-weight-normal">Please sign in</h1>
 
 			<label for="username">Email</label>
-			<input type="email"  name="_username" id="username" class="form-control" autocomplete="email" required autofocus placeholder="Email">
+			<input type="email" name="_username" id="username" class="form-control" autocomplete="email" required autofocus placeholder="Email">
 			<label for="password" class="mt-3">Password</label>
-			<input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required  placeholder="Password">
-
+			<input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required placeholder="Password">
 			<input
 			type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-			{#         
-			            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-			            See https://symfony.com/doc/current/security/remember_me.html #}
-
+			<div class="link m-2">
+				<a class="btn-sm me-2 fs-" href="{{ path('app_forgot_password_request') }}">
+					j'ai oublié mon mot de passe
+				</a>
+			</div>
 			<div class="checkbox mb-3">
 				<input type="checkbox" name="_remember_me" id="_remember_me">
 				<label for="_remember_me">Remember me</label>
 			</div>
-
 
 			<button class="btn btn-lg btn-primary" type="submit">
 				Sign in

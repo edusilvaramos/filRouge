@@ -29,10 +29,14 @@ class ProjectCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
+            
             TextField::new('projectName', 'Nom du Projet'),
             DateField::new('initDate', 'Date de début')->setFormat('yyyy-MM-dd'),
             DateField::new('finishDate', 'Date de fin')->setFormat('yyyy-MM-dd'),
-            ImageField::new('imageProject', 'Photo'),
+            ImageField::new('imageProject')
+                ->setUploadDir('public/assets/images/project/')
+                ->setUploadedFileNamePattern('assets/images/project/'.'[randomhash].[extension]')
+                ->setRequired(false),
 
             TextEditorField::new('description', 'Description'),
             CollectionField::new('Employe', 'Employés')

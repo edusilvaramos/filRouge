@@ -59,7 +59,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //        ;
     //    }
     
-    public function searchUsers(?string $searchTerm, ?string $role, ?string $status, ?Team $team): array
+    public function searchUsers(?string $searchTerm, ?string $status, ?Team $team): array
     {
         $qb = $this->createQueryBuilder('u');
     

@@ -57,6 +57,7 @@ final class UserController extends AbstractController
         UserPasswordHasherInterface $hasher,
         MailerInterface $mailer
     ): Response {
+        
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
