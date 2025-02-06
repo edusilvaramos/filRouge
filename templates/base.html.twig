@@ -60,7 +60,9 @@
 									<a class="nav-link" href="{{ path('app_project_index') }}">Projects</a>
 								</li>
 								{# -------- notifications --------  #}
-								<div class="dropdown">
+								 {{ render(path('notifications')) }}
+
+								{# <div class="dropdown">
 
 									<button class="btn dropdown-toggle btn-primary position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 										<i class="bi bi-bell fs-4"></i>
@@ -95,7 +97,7 @@
 											</div>
 										</li>
 									</ul>
-								</div>
+								</div> #}
 								{# -------- notifications --------  #}
 
 								<li class="nav-item dropdown">

@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Entity\Project;
 use App\Entity\Address;
 use App\Entity\Team;
+use App\Entity\Notification;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -48,6 +49,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Adresses', 'fas fa-elementor', Address::class);
         yield MenuItem::linkToCrud('Projets', 'fas fa-user-tie', Project::class);
         yield MenuItem::linkToCrud('Team', 'fas fa-user-tie', Team::class);
+        yield MenuItem::linkToCrud('Notification', 'fas fa-user-tie', Notification::class);
         yield MenuItem::subMenu('Taches', 'fas fa-bars', Task::class)
             ->setSubItems([
                 MenuItem::linkToCrud('Ajouter', 'fas fa-plus', Task::class)

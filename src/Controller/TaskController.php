@@ -12,7 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
-use IntlChar;
+use App\Entity\User;
+use App\Service\NotificationService;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -33,7 +34,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/new', name: 'app_task_new', methods: ['GET', 'POST'])]
-    public function new(SessionManager $session, Request $request, EntityManagerInterface $entityManager): Response
+    public function new(SessionManager $session, Request $request, EntityManagerInterface $entityManager, NotificationService $notification): Response
     {
         $projectId = $session->getProjectId();
         // dd($projectId);
@@ -51,26 +52,17 @@ final class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
             $task->setProject($project);
-            $sessionEmail = $session->getEmailTask();
 
             $selectedUser = $form->get('employe')->getData();
             $task->setEmploye($selectedUser);
-
-            // dd($sessionEmail);
-            $email = $sessionEmail;
-            // dd($email);
-
-            // dd($request);
-            // $user = $userRepository->findOneBy(['email' => $email]);
-            // $task->setEmploye($user);
 
             $entityManager->persist($task);
             $entityManager->flush();
             $this->addFlash('success', 'La tâche a éte crée avec succéss!');
 
+            $notification->createNotification($selectedUser, "La tâche: " . $task->getTitle() . ", a éte Ajoutée a votre profil.");
+
             return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
-            // função de envio de e-mail
-            // $this->sendEmail($mailer, $user);
         }
         return $this->render('task/newTask.html.twig', [
             'task' => $task,
@@ -82,7 +74,6 @@ final class TaskController extends AbstractController
         ]);
     }
 
-    // ------------------  email -----------------------------------------
 
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task, UserRepository $userRepository): Response
