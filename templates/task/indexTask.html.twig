@@ -1,112 +1,43 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Task Index
 {% endblock %}
-
 {% block body %}
 	{% for message in app.flashes('success') %}
 		<div class="alert alert-success fade-out position-absolute m-3" style="transition: opacity 0.5s ease-in-out;">
 			{{ message }}
 		</div>
 	{% endfor %}
-	
-	<div class="container">
-		<h1 class="text-center text-success">Tasks for Project:
-			{{ project.projectName }}</h1>
-
-		<div class="table-responsive">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Employee affectee</th>
-						<th>Title</th>
-						<th>Description</th>
-						<th>Date de Debut</th>
-						<th>Date de Fin</th>
-						<th>Status</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for task in tasks %}
-						<tr>
-							<td>{{ task.id }}</td>
-							<td>{{ task.employe.nameUser }} </td>
-							<td>{{ task.title }}</td>
-							<td>{{ task.descriptionTask }}</td>
-							<td>{{ task.initDate ? task.initDate|date('Y-m-d') : 'N/A' }}</td>
-							<td>{{ task.finishDate ? task.finishDate|date('Y-m-d') : 'N/A' }}</td>
-							<td {% if task.flagTask == 'completed' %} class="text-success" {% else %} class="text-danger" {% endif %}>{{ task.flagTask }}</td>
-							<td>
-								<a href="{{ path('app_task_show', { id: task.id }) }}" class="btn btn-info btn-sm">View</a>
-								<a href="{{ path('app_task_edit', { id: task.id }) }}" class="btn btn-warning btn-sm">Edit</a>
-							</td>
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="7" class="text-center">No tasks found for this project</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-			<div class="text-center mt-4">
-				<a href="{{ path('app_task_new') }}" class="btn btn-primary">Creer une nouvelle tache</a>
-			</div>
-		</div>
-
-	<style>
-		.container {
-			max-width: 90%;
-			margin: auto;
-			padding: 20px;
-		}
-
-		.table {
-			width: 100%;
-			border-collapse: collapse;
-		}
-
-		.table th,
-		.table td {
-			text-align: center;
-			vertical-align: middle;
-		}
-
-		.btn {
-			margin: 2px;
-		}
-
-		@media(max-width: 768px) {
-			.table th,
-			.table td {
-				white-space: nowrap;
-				font-size: 14px;
-				padding: 5px;
-			}
-
-			.text-center {
-				font-size: 16px;
-			}
-
-			.btn {
-				font-size: 12px;
-				padding: 5px 8px;
-			}
-		}
-
-		@media(max-width: 480px) {
-			.table th,
-			.table td {
-				font-size: 12px;
-			}
-
-			.btn {
-				font-size: 10px;
-				padding: 4px 6px;
-			}
-		}
-	</style>
+	<div class="text-end m-4">
+		<a href="{{ path('app_task_new') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+	</div>
+	<div class="container-fluid w-75 mt-5 mb-5">
+		<h1 class="text-center text-success mb-5 ">
+			Les tâches pour le projet :
+			{{ project.projectName }}
+		</h1>
+		<div class="row g-4">
+			{% if tasks is empty %}
+				<p class="text-center">No tasks found for this project</p>
+			{% else %}
+				{% for task in tasks %}
+					<div class="col-md-6 col-lg-4">
+						<a href="{{ path('app_task_show', { id: task.id }) }}" class="text-decoration-none">
+							<div class="card shadow-sm h-100 border-light text-light">
+								<div class="card-body ">
+									<h5 class="card-header">{{ task.title }}</h5>
+									<strong>Description:</strong>
+									{{ task.descriptionTask }}</p>
+								<p class="{% if task.flagTask == 'completed' %}text-success{% else %}text-danger{% endif %}">
+									<strong>Status:</strong>
+									{{ task.flagTask }}
+								</p>
+								<p>{{ task.employe}}</p>
+							</div>
+						</div>
+					</a>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
 {% endblock %}

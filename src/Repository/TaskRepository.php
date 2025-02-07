@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Project;
@@ -42,12 +43,14 @@ class TaskRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function findByProject(Project $project): array
+    public function findByUserAndProject(Project $project, User $user,): array
     {
         // construtor de queries
         return $this->createQueryBuilder('tasks')  //alias + seguro 
             ->where('tasks.Project = :project') // filtro de busqueda, como o que eu faço no php puro
+            ->andWhere('tasks.employe = :user')
             ->setParameter('project', $project)
+            ->setParameter('user', $user)
             // Cria e pega a Query
             ->getQuery()
             ->getResult() // retorna os resilts em formato array 

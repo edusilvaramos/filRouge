@@ -25,8 +25,11 @@ final class TaskController extends AbstractController
     {
         $projectId = $session->getProjectId();
         $project = $entityManager->getRepository(Project::class)->find($projectId);
+        $user = $this->getUser();
+
         // Busca tarefas associadas ao projeto
-        $tasks = $taskRepository->findByProject($project);
+        $tasks = $taskRepository->findByUserAndProject($project, $user);
+
         return $this->render('task/indexTask.html.twig', [
             'project' => $project,
             'tasks' => $tasks,
@@ -87,39 +90,34 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager, SessionManager $session): Response
+    public function edit(Request $request, Task $task, EntityManagerInterface $entityManager, SessionManager $session, NotificationService $notification): Response
     {
         $employe = $task->getEmploye();
+        // dd($employe);
         $email = $employe ? $employe->getEmail() : null; // Verifica se há um empregado antes de pegar a matrícula
         // dd($email);
         $projectId = $session->getProjectId();
         // Usa a sessão já injetada no construtor
-
         // dd($projectId);
         $project = $entityManager->getRepository(Project::class)->find($projectId);
         $form = $this->createForm(TaskType::class, $task, [
             'project' => $project
         ]);
         // Definir a matrícula no campo correto do formulário, caso o empregado exista
-
         $form->handleRequest($request);
         $projectId = $session->getProjectId();
         $project = $entityManager->getRepository(Project::class)->find($projectId);
         $employes = $project->getEmploye();
-
+        // dd($employes);
         if ($form->isSubmitted() && $form->isValid()) {
-            $sessionEmail = $session->getEmailTask();
-
             $selectedUser = $form->get('employe')->getData();
+            // dd($selectedUser);
             $task->setEmploye($selectedUser);
-
-            // Associar o empregado à tarefa
-
-
-            // Salvar no banco
             $entityManager->flush();
             $this->addFlash('success', 'La tâche a éte modifiée avec succéss!');
-
+            if ($employe != $selectedUser) {
+                $notification->createNotification($selectedUser, "La tâche: " . $task->getTitle() . ", a éte Ajoutée a votre profil.");
+            }
             return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
         }
         // dd($task);
