@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\NotificationService;
 
 #[Route('/project')]
 final class ProjectController extends AbstractController
@@ -23,50 +24,38 @@ final class ProjectController extends AbstractController
         return $this->render('project/projectIndex.html.twig');
     }
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, NotificationService $notification): Response
     {
-        // Cria uma nova instância do projeto
         $project = new Project();
-        // Cria o formulário baseado no tipo de entidade ProjectType
         $form = $this->createForm(ProjectType::class, $project);
-        // cria o formulário com os dados da requisição(os dados no formtype), que contém os dados do formulário/entity
-        $form->handleRequest($request);
+        $form->handleRequest($request); // formType
         if ($form->isSubmitted() && $form->isValid()) {
-            // Captura as matrículas digitadas no campo 'Employe'
             $emails = $form->get('Employe')->getData();
-            // Se houver matrículas informadas, realiza a busca no banco de dados
             if (!empty($emails)) {
-                // Consulta no banco de dados buscando os usuários com as matrículas fornecidas
                 $employeEntities = $userRepository->createQueryBuilder('u')
-                    // essa perte e muito importante, porque estou passando uma lista de matricules - (:matricules)
                     ->where('u.email IN (:email)')
                     ->setParameter('email', $emails)
                     ->getQuery()
                     ->getResult();
-                // Associa os usuários encontrados ao projeto $employeEntities  e uma lista 
                 foreach ($employeEntities as $user) {
                     $project->addEmploye($user);
+                    // notifications
+                    $notification->createNotification($user, "Le Project: " . $project->getProjectName() . ", a éte ajoutée a votre profil.");
                 }
             }
-            // Gerenciamento do upload de imagem para o projeto
+            // Gerenciamento  de imagem 
             $chamin = "assets/images/project"; // Define o diretório de destino para a imagem
-            $file = $form->get('imageProject')->getData(); // Obtém o arquivo de imagem do formulário
+            $file = $form->get('imageProject')->getData();
             // Se um arquivo for enviado, processa o upload
             if ($file) {
-                // Gera um nome único para o arquivo de imagem
                 $fileName = uniqid() . '.' . $file->guessExtension();
-                // Move o arquivo para o diretório de destino
                 $file->move($chamin, $fileName);
-                // Associa o caminho da imagem ao projeto
                 $project->setImageProject($chamin . '/' . $fileName);
             }
-            // Persiste o novo projeto no banco de dados
             $entityManager->persist($project);
             $entityManager->flush();
-            // Redireciona para a página de listagem de projetos após a criação
             return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
         }
-        // Exibe o formulário para criação do projeto
         return $this->render('project/projectNew.html.twig', [
             'project' => $project,
             'form' => $form,
@@ -104,7 +93,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Project $project, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    public function edit(Request $request, Project $project, EntityManagerInterface $entityManager, UserRepository $userRepository, NotificationService $notification): Response
     {
         // Nome da imagem atual
         $originalImage = $project->getImageProject();
@@ -152,6 +141,7 @@ final class ProjectController extends AbstractController
 
                 foreach ($newEmployes as $newEmploye) {
                     $project->addEmploye($newEmploye);
+                    $notification->createNotification($newEmploye, "Le Project: " . $project->getProjectName() . ", a éte modifiée.");
                 }
             }
             // Salvar alterações no banco de dados
