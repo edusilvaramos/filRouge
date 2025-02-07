@@ -7,7 +7,13 @@
 			class="d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start mb-4">
 			<!-- Imagem do Usuário -->
 			<img
-			src="{{ asset('' ~ app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+			{% if app.user.photoUser %}
+			src="{{ asset('' ~ app.user.photoUser) }}"
+			{% else %}
+				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7vB-49_BT-dirwttYZaeE_VByjlQ3raVJZg&s"
+			{% endif %}
+			
+			 alt="User Photo" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
 
 			<!-- Nome do Usuário -->
 			<h1 class="text-success mt-3 mt-md-0 ms-md-5 fs-4 fs-md-2">
@@ -17,7 +23,7 @@
 		</div>
 		<!-- Linha Horizontal -->
 		<hr
-		class="border border-danger rounded-1 border-2 opacity-100 mb-3"/>
+		class="border border-danger rounded-1  opacity-100 mb-3"/>
 		<!-- Links do Usuário -->
 		<ul class="list-unstyled">
 			<li class="mb-2">

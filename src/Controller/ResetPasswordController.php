@@ -136,6 +136,8 @@ class ResetPasswordController extends AbstractController
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
+        // dump($user);
+        // die();
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
@@ -143,8 +145,15 @@ class ResetPasswordController extends AbstractController
         }
 
         try {
+
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+
+            // dump($resetToken);
+            // die();
         } catch (ResetPasswordExceptionInterface $e) {
+            // dd($e);
+            // die();
+
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.

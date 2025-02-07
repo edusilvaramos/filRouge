@@ -86,9 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
     private Collection $notifications;
-    
 
-   
+
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
@@ -401,8 +401,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-
-
-
 }
