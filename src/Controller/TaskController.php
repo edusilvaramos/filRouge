@@ -117,7 +117,10 @@ final class TaskController extends AbstractController
             $this->addFlash('success', 'La tâche a éte modifiée avec succéss!');
             if ($employe != $selectedUser) {
                 $notification->createNotification($selectedUser, "La tâche: " . $task->getTitle() . ", a éte Ajoutée a votre profil.");
+            } else {
+                $notification->createNotification($selectedUser, "La tâche: " . $task->getTitle() . ", a éte Modifiée.");
             }
+
             return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);
         }
         // dd($task);
