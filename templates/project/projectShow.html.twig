@@ -3,6 +3,7 @@
 {% endblock %}
 {% block body %}
 	<div class="container mt-5 mb-5">
+		{# {{ render(path('app_comment')) }} #}
 		<h1 class="text-center text-primary mb-4">Project Details</h1>
 		<div
 			class="card shadow-sm">
@@ -68,6 +69,7 @@
 				{{ include('project/projectDelete.html.twig') }}
 			</div>
 		</div>
+
 
 	</div>
 {% endblock %}

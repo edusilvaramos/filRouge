@@ -26,10 +26,11 @@ class NotificationController extends AbstractController
         ]);
     }
     #[Route('/notifications/read/{id}', name: 'notification_read', methods: ['POST'])]
-    public function markAsRead(Notification $notification, EntityManagerInterface $em): JsonResponse
+    public function markAsRead(Notification $notification, EntityManagerInterface $entityManager): JsonResponse
     {
         $notification->setIsRead(true);
-        $em->flush();
+        $entityManager->flush();
+        
         return new JsonResponse(['success' => true]);
     }
 }

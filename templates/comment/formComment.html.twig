@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+<div class="d-flex">
+	{{ form_widget(form.content, { 'attr': { 'class': 'form-control' } }) }}
+	<button class="btn btn-primary ms-2 commentButton">{{ button_label|default('Envoyer') }}</button>
+</div>
+{{ form_end(form) }}
