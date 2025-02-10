@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-{# --------------- commnsts --------------- #}<h4 class="fw-bold text-primary text-center">Commentaires</h4>
-<div class="content w-50 m-4 d-flex flex-column border rounded bg-secondary text-black p-2" id="content-comments" style="height: 500px; overflow-y: scroll;  ">
+{# --------------- commnsts --------------- #}
+<h4 class="fw-bold text-primary text-center">Commentaires</h4>
+<div class="content w-50 m-4 d-flex flex-column border rounded bg-secondary text-black p-2 pb-5" id="content-comments" style="height: 500px; overflow-y: scroll;">
 	{% for comment in comments %}
 		{% if comment.user.email == app.user.email %}
 			<div class="m-2 text-end d-flex flex-column">
@@ -33,37 +34,5 @@
     <input class="form-control" type="text" name="comment" id="comment" placeholder="Votre commentaire">
     <button class="btn btn-primary ms-2" id="commentButton">Envoyer</button>
 </div>
-
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("commentButton").addEventListener("click", function () {
-        let commentContent = document.getElementById("comment").value.trim();
-
-        if (commentContent === "") {
-            alert("Le commentaire ne peut pas être vide !");
-            return;
-        }
-		console.log(commentContent);
-        fetch(`/comment/new`, {
-                method: "POST", // Faz uma requisição POST para colocar o comment no db
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest", // Indica que é uma requisição AJAX
-                }
-            })
-			.then(response => response.json())
-       		.catch(error => {
-            alert("Erreur : " + error.message);
-        });
-    });
-});
-
-
-</script>
-
-{# ------ teste form comment ------ #}
-
-{# {{ render(path('app_comment_new')) }}</div> #}
 
 {% endblock %}

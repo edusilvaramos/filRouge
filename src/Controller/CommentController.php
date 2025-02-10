@@ -14,11 +14,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Classes\SessionManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\User;
 
 
 final class CommentController extends AbstractController
 {
-    #[Route('/comment',name: 'app_comment_index', methods: ['GET'])]
+    #[Route('/comment', name: 'app_comment_index', methods: ['GET'])]
     public function comment(CommentRepository $commentRepository, SessionManager $session, EntityManagerInterface $entityManager): Response
     {
         $projectId = $session->getProjectId();
@@ -34,29 +35,37 @@ final class CommentController extends AbstractController
     }
 
     #[Route('/comment/new', name: 'app_comment_new', methods: ['POST'])]
-    public function new( $commentContent,Request $request, EntityManagerInterface $entityManager, Security $security, SessionManager $session): JsonResponse
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security, SessionManager $session): JsonResponse
     {
-        dd($commentContent);
         $user = $security->getUser();
+
+
+        // decode JSON da requisição !!!!!!!!!!!!!!!
+        // o json_decode faz to string e o true transforma em array (para evitar que seja um objeto)
+        $data = json_decode($request->getContent(), true);
+        // dd($data);
+        //tentar resolver o problema do projeto se ele nao for selecionado ??
         $projectId = $session->getProjectId();
         $project = $entityManager->getRepository(Project::class)->find($projectId);
-        $date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
-        
+
+        // Criar e salvar 
         $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setUser($user);
-            $comment->setProject($project);
-            $comment->setDate($date);
+        $comment->setUser($user);
+        $comment->setProject($project);
+        $comment->setContent(trim($data['content']));
+        $comment->setDate(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
 
-            $entityManager->persist($comment);
-            $entityManager->flush();
+        $entityManager->persist($comment);
+        $entityManager->flush();
 
-            return $this->redirectToRoute('app_comment_index', [], Response::HTTP_SEE_OTHER);
-        }
-        return $this->render('comment/newComment.html.twig', [
-            'form' => $form->createView(),
+        // resposta JSON pro view/frontend
+        $user = $entityManager->getRepository(User::class)->find($user);
+        return new JsonResponse([
+            'success' => true,
+            'username' => $user->getNameUser(),
+            'content' => $comment->getContent(),
+            'date' => $comment->getDate()->format('Y-m-d H:i'),
+            'photoUrl' => $user->getPhotoUser() ? '/' . $user->getPhotoUser() : 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png',
         ]);
     }
 }
