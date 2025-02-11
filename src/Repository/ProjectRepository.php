@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\User;
 
 /**
  * @extends ServiceEntityRepository<Project>
@@ -40,4 +41,16 @@ class ProjectRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findProjectsByUser(User $user): array
+    {
+        // construtor de queries
+        return $this->createQueryBuilder('j')  //alias + seguro 
+            ->join('j.Employe', 'u') // join porque e many to many
+            ->where('u = :user') // filtro de busqueda, como o que eu faço no php puro
+            ->setParameter('user', $user)
+            // Cria e pega a Query
+            ->getQuery()
+            ->getResult() // retorna os resilts em formato array 
+        ;
+    }
 }

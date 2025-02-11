@@ -3,12 +3,9 @@
 {% block title %}home
 {% endblock %}
 {% block body %}
-	{% block conteudo %}
-<div class="container mt-5 px-3 px-md-5">
-			<h1 class="text-success mx-auto">HOME PAGE
-			</h1>
-			<hr class="border border-danger rounded-1 border-2 opacity-100 mt-1 mb-2"/>
+
+		<div class="container mt-5 px-3 px-md-5">
+			{{ render(path('app_statistiques')) }}
 		</div>
-		
-	{% endblock %}
+	
 {% endblock %}

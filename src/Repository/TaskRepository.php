@@ -56,4 +56,13 @@ class TaskRepository extends ServiceEntityRepository
             ->getResult() // retorna os resilts em formato array 
         ;
     }
+    public function findTasksByUser(User $user)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.employe', 'e')
+            ->where('e.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
 }

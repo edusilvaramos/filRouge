@@ -70,10 +70,7 @@ final class ProjectController extends AbstractController
     {
         $project = $entityManager->getRepository(Project::class)->find($id);
         $tasks = $taskRepository->findBy(['Project' => $project]);
-
         $session->setProjectId($id);
-
-
         $flagTaskStatus = 'Pending';
         $employe = $userRepository->findAll();
         foreach ($tasks as $task) {
@@ -138,7 +135,6 @@ final class ProjectController extends AbstractController
                     ->setParameter('email', $newMatricules)
                     ->getQuery()
                     ->getResult();
-
                 foreach ($newEmployes as $newEmploye) {
                     $project->addEmploye($newEmploye);
                     $notification->createNotification($newEmploye, "Le Project: " . $project->getProjectName() . ", a éte modifiée.");
@@ -146,7 +142,7 @@ final class ProjectController extends AbstractController
             }
             // Salvar alterações no banco de dados
             $entityManager->flush();
-            $this->addFlash('success', 'Le Project ' .   $title . ' a editée avec succéss!');
+            $this->addFlash('success', 'Le Project ' . $title . ' a editée avec succéss!');
             return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('project/projectEdit.html.twig', [
@@ -156,8 +152,6 @@ final class ProjectController extends AbstractController
             'originalImage' => $originalImage
         ]);
     }
-
-
     #[Route('/{id}', name: 'app_project_delete', methods: ['POST'])]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
