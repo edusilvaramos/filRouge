@@ -1,38 +1,43 @@
-{% extends 'base.html.twig' %}
-{% block body %}
-{# --------------- commnsts --------------- #}
-<h4 class="fw-bold text-primary text-center">Commentaires</h4>
-<div class="content w-50 m-4 d-flex flex-column border rounded bg-secondary text-black p-2 pb-5" id="content-comments" style="height: 500px; overflow-y: scroll;">
-	{% for comment in comments %}
-		{% if comment.user.email == app.user.email %}
-			<div class="m-2 text-end d-flex flex-column">
-				<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle align-self-end" style="width: 60px; height: 60px; object-fit: cover;"></img>
-			<label>{{ comment.user }}</label>
-		</div>
-		<div class=" bg-light border p-2 rounded flex-row-reverse w-50 align-self-end">
-			<p class="p-2 text-end">{{ comment.content }}</p>
-			<span class="fs-6 text-muted">{{ comment.date | date('d/m/Y h:i') }}</span>
-		</div>
-	{% else %}
-		<div class="m-2 d-flex flex-column">
-			<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle mt-2" style="width: 60px; height: 60px; object-fit: cover;"></img>
-		<label>{{ comment.user }}</label>
-	</div>
-	<div class="bg-light border p-2 rounded w-50 ">
-		<p class="p-2 ">
-			{{ comment.content }}
-		</p>
-		<span class="fs-6 text-muted float-end ">{{ comment.date | date('d/m/Y h:i') }}</span>
-	</div>
-{% endif %}
-{% endfor %}
-<hr>
-{# ------ teste form comment ------ #}
+<div class="dropdown m-3 ">
+	<button class="btn btn-secondary dropdown-toggle fs-4 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+		<i class="bi bi-chat-left-dots-fill"></i>
+	</button>
+	<ul class="dropdown-menu w-25">
+		<li>
+			{# --------------- commnsts --------------- #}
+			<h4 class="fw-bold text-primary text-center">Commentaires</h4>
+			<div class="content  m-4 d-flex flex-column border rounded bg-secondary text-black p-2 pb-5" id="content-comments" style="height: 500px; overflow-y: scroll;">
+				{% for comment in comments %}
+					{% if comment.user.email == app.user.email %}
+						<div class="m-2 text-end d-flex flex-column">
+							<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle align-self-end" style="width: 60px; height: 60px; object-fit: cover;"></img>
+						<label>{{ comment.user }}</label>
+					</div>
+					<div class=" bg-light border p-2 rounded flex-row-reverse w-50 align-self-end">
+						<p class="p-2 text-end">{{ comment.content }}</p>
+						<span class="fs-6 text-muted">{{ comment.date | date('d/m/Y h:i') }}</span>
+					</div>
+				{% else %}
+					<div class="m-2 d-flex flex-column">
+						<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle mt-2" style="width: 60px; height: 60px; object-fit: cover;"></img>
+					<label>{{ comment.user }}</label>
+				</div>
+				<div class="bg-light border p-2 rounded w-50 ">
+					<p class="p-2 ">
+						{{ comment.content }}
+					</p>
+					<span class="fs-6 text-muted float-end ">{{ comment.date | date('d/m/Y h:i') }}</span>
+				</div>
+			{% endif %}
+		{% endfor %}
+		<hr>
+		{# ------ teste form comment ------ #}
 
-</div>
-<div class="d-flex content w-50">
-    <input class="form-control" type="text" name="comment" id="comment" placeholder="Votre commentaire">
-    <button class="btn btn-primary ms-2" id="commentButton">Envoyer</button>
-</div>
+	</div>
+	<div class="d-flex content p-2">
+		<input class="form-control" type="text" name="comment" id="comment" placeholder="Votre commentaire">
+		<button class="btn btn-primary ms-2" id="commentButton">Envoyer</button>
+	</div>
+</li></ul></div>
 
-{% endblock %}
+

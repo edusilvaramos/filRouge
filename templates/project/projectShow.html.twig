@@ -2,8 +2,10 @@
 {% block title %}Project Details
 {% endblock %}
 {% block body %}
+	<div class="text-end">
+		{{ render(path('app_comment_index')) }}
+	</div>
 	<div class="container mt-5 mb-5">
-		{# {{ render(path('app_comment')) }} #}
 		<h1 class="text-center text-primary mb-4">Project Details</h1>
 		<div
 			class="card shadow-sm">
