@@ -1,43 +1,52 @@
-<div class="dropdown m-3 ">
-	<button class="btn btn-secondary dropdown-toggle fs-4 " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-		<i class="bi bi-chat-left-dots-fill"></i>
-	</button>
-	<ul class="dropdown-menu w-25">
-		<li>
-			{# --------------- commnsts --------------- #}
-			<h4 class="fw-bold text-primary text-center">Commentaires</h4>
-			<div class="content  m-4 d-flex flex-column border rounded bg-secondary text-black p-2 pb-5" id="content-comments" style="height: 500px; overflow-y: scroll;">
-				{% for comment in comments %}
-					{% if comment.user.email == app.user.email %}
-						<div class="m-2 text-end d-flex flex-column">
-							<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle align-self-end" style="width: 60px; height: 60px; object-fit: cover;"></img>
-						<label>{{ comment.user }}</label>
-					</div>
-					<div class=" bg-light border p-2 rounded flex-row-reverse w-50 align-self-end">
-						<p class="p-2 text-end">{{ comment.content }}</p>
-						<span class="fs-6 text-muted">{{ comment.date | date('d/m/Y h:i') }}</span>
-					</div>
-				{% else %}
-					<div class="m-2 d-flex flex-column">
-						<img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle mt-2" style="width: 60px; height: 60px; object-fit: cover;"></img>
-					<label>{{ comment.user }}</label>
-				</div>
-				<div class="bg-light border p-2 rounded w-50 ">
-					<p class="p-2 ">
-						{{ comment.content }}
-					</p>
-					<span class="fs-6 text-muted float-end ">{{ comment.date | date('d/m/Y h:i') }}</span>
-				</div>
-			{% endif %}
-		{% endfor %}
-		<hr>
-		{# ------ teste form comment ------ #}
 
-	</div>
-	<div class="d-flex content p-2">
-		<input class="form-control" type="text" name="comment" id="comment" placeholder="Votre commentaire">
-		<button class="btn btn-primary ms-2" id="commentButton">Envoyer</button>
-	</div>
-</li></ul></div>
-
-
+<button type="button" class="btn btn-secondary fs-4 m-3" data-bs-toggle="modal" data-bs-target="#commentsModal">
+    <i class="bi bi-chat-left-dots-fill"></i>
+</button>
+<div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="fw-bold text-primary text-center" id="commentsModalLabel">Commentaires</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="content d-flex flex-column border rounded bg-secondary text-black p-2 pb-4" 
+                     id="content-comments" style="height: 500px; overflow-y: scroll;">
+                    {% for comment in comments %}
+                        {% if comment.user.email == app.user.email %}
+                            <div class="m-2 text-end d-flex flex-column">
+                                <img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle align-self-end" 
+                                     style="width: 50px; height: 50px; object-fit: cover;" alt="User">
+                                <label class="mt-1">{{ comment.user }}</label>
+                            </div>
+                            <div class="bg-light border p-2 rounded w-50 align-self-end">
+                                <p class="p-2 text-end">{{ comment.content }}</p>
+                                <span class="fs-6 text-muted">{{ comment.date | date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% else %}
+                            <div class="m-2 d-flex flex-column">
+                                <img src="{{ asset(comment.user.photoUser) }}" class="img-fluid rounded-circle mt-2" 
+                                     style="width: 50px; height: 50px; object-fit: cover;" alt="User">
+                                <label class="mt-1 text-start">{{ comment.user }}</label>
+                            </div>
+                            <div class="bg-light border p-2 rounded w-50">
+                                <p class="p-2 text-start">{{ comment.content }}</p>
+                                <span class="fs-6 text-muted float-end">{{ comment.date | date('d/m/Y H:i') }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+			<div class="d-flex align-items-center p-2"> 
+			<input class="form-control" type="text" name="comment" id="comment" placeholder="Votre commentaire">
+            <button class="btn btn-primary ms-2" id="commentButton">Envoyer</button></div> 
+        </div>
+    </div>
+</div>
+{# para fazer o scroll automatico no modal direto pro final #}
+<script>
+ commentsModal.addEventListener("shown.bs.modal", function () {
+        let commentsContainer = document.getElementById("content-comments");
+        commentsContainer.scrollTop = commentsContainer.scrollHeight;
+    });
+</script>
