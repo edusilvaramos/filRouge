@@ -14,7 +14,16 @@
 
 				<div class="mt-4 d-flex justify-content-between">
 					<a href="{{ path('app_task_index') }}" class="btn btn-secondary">Back to List</a>
-					{{ include('task/deleteTask.html.twig') }}
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ include('task/deleteTask.html.twig') }}
+
+					{% else %}
+						{% if is_granted('ROLE_MANAGER') %}
+							{{ include('task/deleteTask.html.twig') }}
+
+						{% endif %}
+					{% endif %}
+
 				</div>
 			</div>
 		</div>

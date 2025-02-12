@@ -48,10 +48,10 @@ class UserCrudController extends AbstractCrudController
             TextField::new('telephone'),
             TextField::new('service'),
             TextField::new('nameUser'),
-            ImageField::new('photoUser')
-                ->setUploadDir('public/assets/images/user/')
-                ->setUploadedFileNamePattern('assets/images/user/' . '[randomhash].[extension]')
-                ->setRequired(false),
+            // ImageField::new('photoUser')
+            //     ->setUploadDir('public/assets/images/user/')
+            //     ->setUploadedFileNamePattern('assets/images/user/' . '[randomhash].[extension]')
+            //     ->setRequired(false),
         ];
     }
 }

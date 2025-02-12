@@ -7,9 +7,17 @@
 			{{ message }}
 		</div>
 	{% endfor %}
-	<div class="text-end m-4">
-		<a href="{{ path('app_task_new') }}" class="btn btn-success">Créer une nouvelle tâche</a>
-	</div>
+	{% if is_granted('ROLE_ADMIN') %}
+		<div class="text-end m-4">
+			<a href="{{ path('app_task_new') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+		</div>
+	{% else %}
+		{% if is_granted('ROLE_MANAGER') %}
+			<div class="text-end m-4">
+				<a href="{{ path('app_task_new') }}" class="btn btn-success">Créer une nouvelle tâche</a>
+			</div>
+		{% endif %}
+	{% endif %}
 	<div class="container-fluid w-75 mt-5 mb-5">
 		<h1 class="text-center text-success mb-5 ">
 			Les tâches pour le projet :
@@ -39,5 +47,4 @@
 			{% endfor %}
 		{% endif %}
 	</div>
-</div>
-{% endblock %}
+</div>{% endblock %}

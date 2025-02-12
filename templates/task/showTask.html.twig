@@ -44,40 +44,55 @@
 							Status:</p>
 						<h5 class="text-muted">
 
-						{% if task.flagTask == 'completed' %}
-						<span class="badge bg-success">Terminé
-					{% elseif task.flagTask == 'in_progress' %}
-						<span class="badge bg-warning text-dark">Non terminé
-					{% else %}
-						<span class="badge bg-danger">Non commencé
-					</span>{% endif %}
-				</h5>
-			</div>
-			<hr>
-			<div class="mb-3">
-				<p class="fw-bold">
-					<i class="bi bi-person"></i>
-					Employee affecteé</p>
-				<div class="d-flex align-items-center gap-3">
-					<img src="{{ asset(task.Employe.photoUser) }}" alt="{{ task.Employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle border shadow-sm" style="width:60px; height: 60px; object-fit: cover;">
-					<div>
-						<p class="fw-bold mb-1">
-							{{ task.Employe.firstName ?: 'Unknown' }}
-						</p>
-						<p class="text-muted">{{ task.Employe.email ?: 'Unknown' }}</p>
+							{% if task.flagTask == 'completed' %}
+								<span class="badge bg-success">Terminé
+								{% elseif task.flagTask == 'in_progress' %}
+									<span class="badge bg-warning text-dark">Non terminé
+									{% else %}
+										<span class="badge bg-danger">Non commencé
+										</span>
+									{% endif %}
+								</h5>
+							</div>
+							<hr>
+							<div class="mb-3">
+								<p class="fw-bold">
+									<i class="bi bi-person"></i>
+									Employee affecteé</p>
+								<div class="d-flex align-items-center gap-3">
+									<img src="{{ asset(task.Employe.photoUser) }}" alt="{{ task.Employe.firstName ?: 'Team Member' }}" class="img-fluid rounded-circle border shadow-sm" style="width:60px; height: 60px; object-fit: cover;">
+									<div>
+										<p class="fw-bold mb-1">
+											{{ task.Employe.firstName ?: 'Unknown' }}
+										</p>
+										<p class="text-muted">{{ task.Employe.email ?: 'Unknown' }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
+				<div class="d-flex justify-content-center mt-4 gap-3">
+					<a href="{{ path('app_task_index') }}" class="btn btn-outline-secondary">
+						<i class="bi bi-arrow-left-circle"></i>
+						Back to list
+					</a>
+					<a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-primary">
+						<i class="bi bi-pencil-square"></i>
+						Edit
+					</a>
+
+					{% if is_granted('ROLE_ADMIN') %}
+						{{ include('task/deleteTask.html.twig') }}
+
+					{% else %}
+						{% if is_granted('ROLE_MANAGER') %}
+							{{ include('task/deleteTask.html.twig') }}
+
+						{% endif %}
+					{% endif %}
+
+				</div>
 			</div>
-		</div>
-	</div>
-</div>
-<div class="d-flex justify-content-center mt-4 gap-3">
-	<a href="{{ path('app_task_index') }}" class="btn btn-outline-secondary">
-		<i class="bi bi-arrow-left-circle"></i>
-		Back to list
-	</a>
-	<a href="{{ path('app_task_edit', {'id': task.id}) }}" class="btn btn-primary">
-		<i class="bi bi-pencil-square"></i>
-		Edit
-	</a>
-	{{ include('task/deleteTask.html.twig') }}</div></div>{% endblock %}
+
+		{% endblock %}
