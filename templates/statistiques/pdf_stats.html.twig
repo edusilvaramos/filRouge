@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="assets/css/rapport.css">
+	</head>
+	<body>
+		<div class="header">
+			<img id="logo" src="assets/images/logo.png" alt="Logo">
+			<h1>Rapport -
+				{{ "now"|date("m/Y") }}</h1>
+		</div>
+		<div class="container">
+			<h2>Taches par Employee</h2>
+			<table class="table">
+				<thead>
+					<tr>
+
+						<th>Matricule</th>
+						<th>Employee</th>
+						<th>Taches</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for user in users %}
+
+						<tr>
+							<td>{{ user.matricule }}</td>
+							<td>{{ user.firstName }}</td>
+							<td>
+								<ul>
+									{% for task in user.task %}
+										{% if task.flagTask == 'completed' %}
+											<li> {{ task.flagTask }} : {{ task.flagTask|length }}
+											</li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
