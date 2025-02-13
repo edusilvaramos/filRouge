@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+  // {# para fazer o scroll automatico no modal direto pro final #}
+
   commentsModal.addEventListener("shown.bs.modal", function () {
     let commentsContainer = document.getElementById("content-comments");
     commentsContainer.scrollTop = commentsContainer.scrollHeight;

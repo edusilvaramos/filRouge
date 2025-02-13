@@ -37,12 +37,12 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/project, roles: ROLE_ADMIN }
-    # - { path: ^/profil, roles: ROLE_ADMIN }
+    - { path: ^/admin, roles: ROLE_ADMIN }
     # manager
-    # - { path: ^/profile, roles: ROLE_MANAGER }
-    # - { path: ^/project, roles: ROLE_MANAGER }
+    - { path: ^/user/new, roles: ROLE_MANAGER }
+    - { path: ^/project/new, roles: ROLE_MANAGER }
+    - { path: ^/project/edit, roles: ROLE_MANAGER }
+    - { path: ^/task/new, roles: ROLE_MANAGER }
     # - { path: ^/profil, roles: ROLE_MANAGER }
     # user
     # - { path: ^/profil, roles: ROLE_USER }

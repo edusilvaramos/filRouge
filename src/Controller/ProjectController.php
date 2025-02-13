@@ -89,7 +89,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_project_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager, UserRepository $userRepository, NotificationService $notification): Response
     {
         // Nome da imagem atual

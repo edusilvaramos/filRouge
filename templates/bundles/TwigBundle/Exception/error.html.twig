@@ -1,0 +1,17 @@
+
+{% block stylesheet %}		
+			{#  CSS local #}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-danger text-center ">Error</h1>
+    <p class="text-center fs-5">
+       The requested page couldn't be located. Checkout for any URL
+    </p>
+<a href="{{ path('app_home') }}" class="btn btn-primary btn-sm fs-5">
+									
+										Returner sur la page d'accueil
+									</a>
+{% endblock %}

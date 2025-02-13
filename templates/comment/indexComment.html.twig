@@ -1,5 +1,5 @@
 
-<button type="button" class="btn btn-secondary fs-4 m-3" data-bs-toggle="modal" data-bs-target="#commentsModal">
+<button type="button" class="btn btn-primary  fs-4 m-3" data-bs-toggle="modal" data-bs-target="#commentsModal">
     <i class="bi bi-chat-left-dots-fill"></i>
 </button>
 <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
@@ -43,10 +43,3 @@
         </div>
     </div>
 </div>
-{# para fazer o scroll automatico no modal direto pro final #}
-<script>
- commentsModal.addEventListener("shown.bs.modal", function () {
-        let commentsContainer = document.getElementById("content-comments");
-        commentsContainer.scrollTop = commentsContainer.scrollHeight;
-    });
-</script>

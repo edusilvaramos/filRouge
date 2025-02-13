@@ -89,7 +89,7 @@ final class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_task_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Task $task, EntityManagerInterface $entityManager, SessionManager $session, NotificationService $notification): Response
     {
         $employe = $task->getEmploye();

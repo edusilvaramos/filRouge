@@ -1,0 +1,17 @@
+
+{% block stylesheet %}		
+			{#  CSS local #}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-danger text-center ">La Route que vous cherchez n'existe pa (Route does not exist)</h1>
+    <p class="text-center fs-5">
+       La demande n'a pas pu aboutir. Cette Route n'existe pas
+    </p>
+<a href="{{ path('app_home') }}" class="btn btn-primary btn-sm fs-5">
+									
+										Returner sur la page d'accueil
+									</a>
+{% endblock %}
