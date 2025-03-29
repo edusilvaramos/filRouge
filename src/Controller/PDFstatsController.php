@@ -18,10 +18,6 @@ final class PDFstatsController extends AbstractController
         $users = $userRepository->findAll();
         $tasks = $userRepository->findAll();
 
-
-
-
-
         // ------------------------------------------------------------------------------
 
 

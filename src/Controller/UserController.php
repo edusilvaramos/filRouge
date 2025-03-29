@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Entity\Team;
 use App\Form\UserType;
 use App\Form\SearchType;
-
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -57,7 +56,7 @@ final class UserController extends AbstractController
         UserPasswordHasherInterface $hasher,
         MailerInterface $mailer
     ): Response {
-        
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -179,5 +178,4 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-   
 }
