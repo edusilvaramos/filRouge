@@ -102,6 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->task = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function __toString()

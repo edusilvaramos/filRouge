@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use App\Classes\Search;
+use App\Utils\Search;
 use App\Entity\User;
 use App\Entity\Team;
 use App\Form\UserType;
 use App\Form\SearchType;
 use App\Repository\UserRepository;
+use App\Service\BrevoMailer;
+use CMEN\GoogleChartsBundle\DependencyInjection\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -16,11 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use GuzzleHttp\Client as GuzzleClient;
+use SendinBlue\Client\Configuration as ClientConfiguration;
+use SendinBlue\Client\Api\TransactionalEmailsApi;
+use SendinBlue\Client\Model\SendSmtpEmail;
 
 
 #[Route('/user')]
 final class UserController extends AbstractController
 {
+    public function __construct(private BrevoMailer $brevoMailer) {}
+
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
@@ -54,7 +62,9 @@ final class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $hasher,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+
+
     ): Response {
 
         $user = new User();
@@ -88,10 +98,10 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // **Chamando a função de envio de e-mail**
-            $this->sendEmail($mailer, $user);
+            // Chamando a função de envio de e-mail
+            $this->brevoMailer->sendUserWelcomeEmail($user);
 
-            return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/newUser.html.twig', [
@@ -100,26 +110,6 @@ final class UserController extends AbstractController
         ]);
     }
 
-    //  Função separada para enviar o e-mail
-
-    private function sendEmail(MailerInterface $mailer, User $user)
-    {
-        $email = (new TemplatedEmail())
-            ->from('edusilvaramos@hotmail.com')
-            ->to($user->getEmail()) // email do user cadastrado
-            ->subject('Confirmation de création de compte')
-            ->htmlTemplate('emails/confirmation.html.twig')
-            ->context([
-                'user' => [
-                    'firstName' => $user->getFirstName(),
-                    'lastName' => $user->getLastName(),
-                    'email' => $user->getEmail(),
-                    'team' => $user->getTeam()->getName(),
-                ],
-            ]);
-
-        $mailer->send($email);
-    }
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
@@ -127,6 +117,7 @@ final class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
