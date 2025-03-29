@@ -2,53 +2,53 @@
 	{{ form_start(form) }}
 
 	<div class="mb-3">
-		{{ form_widget(form.matricule) }}
+		{{ form_row(form.matricule) }}
 	</div>
 
 	<div class="mb-3">
-		{{ form_widget(form.email, {'attr': {'onblur': 'checkEmail()','id': 'email'}}) }}
+		{{ form_row(form.email, {'attr': {'onblur': 'checkEmail()','id': 'email'}}) }}
 		<p>
 			<small class="text-danger d-none" id="emailError">L'utilisateur est deja cadastre</small>
 		</p>
 
 		<div class="mb-3">
-			{{ form_widget(form.password.first) }}
+			{{ form_row(form.password.first) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.password.second) }}
+			{{ form_row(form.password.second) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.firstName) }}
+			{{ form_row(form.firstName) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.lastName) }}
+			{{ form_row(form.lastName) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.birthday) }}
+			{{ form_row(form.birthday) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.telephone) }}
+			{{ form_row(form.telephone) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.team) }}
+			{{ form_row(form.team) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.service) }}
+			{{ form_row(form.service) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.nameUser) }}
+			{{ form_row(form.nameUser) }}
 		</div>
 
 		<div class="mb-3">
-			{{ form_widget(form.photoUser) }}
+			{{ form_row(form.photoUser) }}
 		</div>
 
 		<button class="btn btn-primary w-100 mt-3">{{ button_label|default('Save') }}</button>

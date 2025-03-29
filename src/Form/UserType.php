@@ -33,7 +33,7 @@ class UserType extends AbstractType
                 'label' => 'Mot de Passe',
                 'required' => true,
                 'first_options' => ['label' => 'Mot de Passe', 'attr' => ['class' => 'form-control', 'placeholder' => 'Mot de Passe']],
-                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['placeholder' => 'Mot de Passe', 'class' => 'form-control mb-5',]],
+                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['placeholder' => 'confirmer le mot de Passe', 'class' => 'form-control mb-5',]],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
