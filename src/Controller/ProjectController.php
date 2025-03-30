@@ -7,13 +7,14 @@ use App\Entity\User;
 use App\Form\ProjectType;
 use App\Repository\UserRepository;
 use App\Repository\TaskRepository;
-use App\Classes\SessionManager;
+use App\Utils\SessionManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\NotificationService;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 #[Route('/project')]
 final class ProjectController extends AbstractController

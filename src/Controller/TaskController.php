@@ -7,15 +7,17 @@ use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Classes\SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Service\NotificationService;
+use App\Utils\SessionManager;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 #[Route('/task')]
 final class TaskController extends AbstractController
@@ -81,6 +83,7 @@ final class TaskController extends AbstractController
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task, UserRepository $userRepository): Response
     {
+        dd($task);
         $users = $userRepository->findAll();
 
         return $this->render('task/showTask.html.twig', [

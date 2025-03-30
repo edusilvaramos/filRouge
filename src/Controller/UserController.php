@@ -64,7 +64,6 @@ final class UserController extends AbstractController
         UserPasswordHasherInterface $hasher,
         MailerInterface $mailer,
 
-
     ): Response {
 
         $user = new User();
@@ -101,7 +100,7 @@ final class UserController extends AbstractController
             // Chamando a função de envio de e-mail
             $this->brevoMailer->sendUserWelcomeEmail($user);
 
-            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_search', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/newUser.html.twig', [
@@ -117,7 +116,6 @@ final class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $hasher): Response
