@@ -33,7 +33,7 @@ final class UserController extends AbstractController
     public function index(UserRepository $userRepository): Response
     {
         // block the page only for users
-        // $this->denyAccessUnlessGranted('ROLE_USER');
+        // $this->denyAccessUnlessGranted(' _USER');
 
         return $this->render('user/indexUser.html.twig');
     }
@@ -57,18 +57,21 @@ final class UserController extends AbstractController
             'searchForm' => $form->createView(),
         ]);
     }
+
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $hasher,
         MailerInterface $mailer,
+        UserRepository $userRepository,
 
     ): Response {
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Recuperar a equipe selecionada no formulário

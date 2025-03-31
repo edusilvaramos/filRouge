@@ -1,0 +1,73 @@
+<div {{ attributes }}> 
+	{{ form_start(form, {
+		attr: {
+			'data-action': 'live#action:prevent',
+			'data-live-action-param': 'saveRegistration',
+			novalidate: true
+		}
+	}) }}
+
+	<div class="mb-3">
+		{{ form_row(form.matricule) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.email, {
+			attr: {
+				'data-model': 'email',
+				'data-action': 'blur->live#action',
+				'data-live-action-param': 'checkEmail'
+			}
+		}) }}
+
+		{% if emailExists %}
+			<small class="text-danger">L'utilisateur est déjà inscrit</small>
+		{% endif %}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.password.first) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.password.second) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.firstName) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.lastName) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.birthday) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.telephone) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.team) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.service) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.nameUser) }}
+	</div>
+
+	<div class="mb-3">
+		{{ form_row(form.photoUser) }}
+	</div>
+
+	<button type="submit" class="btn btn-primary w-100 mt-3" {{ emailExists ? 'disabled' }}>
+		{{ button_label|default('Save') }}
+	</button>
+
+	{{ form_end(form) }}
+</div>
