@@ -44,7 +44,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
-    
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(message: 'La date de naissance est obligatoire.')]
     private ?\DateTimeInterface $birthday = null;
 

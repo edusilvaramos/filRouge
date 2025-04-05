@@ -22,6 +22,9 @@
 {% endif %}
 
 	</div>
+{% if form.password is defined %}
+
+
 
 	<div class="mb-3">
 		{{ form_row(form.password.first) }}
@@ -30,7 +33,7 @@
 	<div class="mb-3">
 		{{ form_row(form.password.second) }}
 	</div>
-
+{% endif %}
 	<div class="mb-3">
 		{{ form_row(form.firstName) }}
 	</div>
@@ -39,9 +42,21 @@
 		{{ form_row(form.lastName) }}
 	</div>
 
-	<div class="mb-3">
-		{{ form_row(form.birthday) }}
-	</div>
+	<div>
+    {{ form_label(form.birthday) }}
+    {{ form_widget(form.birthday, {
+        attr: {
+            'data-action': 'blur->live#action',
+            'data-live-action': 'validateBirthday',
+			'data-live-action-param': 'validateBirthday',
+			'data-model': 'birthday'
+        }
+    }) }}
+
+    {% if not birthdayIsValid %}
+        <div class="text-danger">La date de naissance est obligatoire.</div>
+    {% endif %}
+</div>
 
 	<div class="mb-3">
 		{{ form_row(form.telephone) }}

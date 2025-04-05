@@ -19,17 +19,18 @@ class CheckForm extends AbstractController
     use ComponentWithFormTrait;
     use DefaultActionTrait;
 
-    #[LiveProp]
-    public bool $isSuccessful = false;
-
-    #[LiveProp]
-    public ?string $newUserEmail = null;
-
     #[LiveProp(writable: true)]
     public ?string $email = null;
 
     #[LiveProp(writable: true)]
     public bool $emailExists = false;
+
+    #[LiveProp(writable: true)]
+    public ?string $birthday = null;
+
+    #[LiveProp]
+    public bool $birthdayIsValid = true;
+
 
 
     #[LiveAction]
@@ -41,14 +42,36 @@ class CheckForm extends AbstractController
             $this->emailExists = false;
         }
     }
+    #[LiveAction]
+    public function validateBirthday(): void
+    {
+        try {
+            $birthdayDate = new \DateTime($this->birthday);
+            $this->birthdayIsValid = true;
+        } catch (\Exception) {
+            $this->birthdayIsValid = false;
+        }
+    }
+
+
 
     protected function instantiateForm(): FormInterface
     {
         $form = $this->createForm(UserType::class);
-        // Preenche o campo email apenas, para o formulário refletir visualmente o valor
+
         if ($this->email) {
             $form->get('email')->setData($this->email);
         }
+
+        if ($this->birthday) {
+            try {
+                $form->get('birthday')->setData(new \DateTime($this->birthday));
+            } catch (\Exception) {
+                // Se data inválida, não seta nada
+            }
+        }
+
+
         return $form;
     }
 }

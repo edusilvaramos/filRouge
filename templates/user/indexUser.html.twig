@@ -20,7 +20,13 @@
 								class="row align-items-center">
 								<!-- Foto grande do usuário -->
 								<div class="col-md-4 text-center">
-									<img src="{{ asset(app.user.photoUser) }}" alt="User Photo" class="img-fluid rounded-circle shadow" style="width: 150px; height: 150px; object-fit: cover;">
+									<img {% if app.user.photoUser %}
+			src="{{ asset(app.user.photoUser) }}"
+			{% else %}
+				src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7vB-49_BT-dirwttYZaeE_VByjlQ3raVJZg&s"
+			{% endif %} alt="User Photo" class="img-fluid rounded-circle shadow" style="width: 150px; height: 150px; object-fit: cover;">
+
+									
 								</div>
 								<!-- Dados do usuário -->
 								<div class="col-md-8">

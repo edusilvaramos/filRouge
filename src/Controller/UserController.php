@@ -9,19 +9,15 @@ use App\Form\UserType;
 use App\Form\SearchType;
 use App\Repository\UserRepository;
 use App\Service\BrevoMailer;
-use CMEN\GoogleChartsBundle\DependencyInjection\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use GuzzleHttp\Client as GuzzleClient;
-use SendinBlue\Client\Configuration as ClientConfiguration;
-use SendinBlue\Client\Api\TransactionalEmailsApi;
-use SendinBlue\Client\Model\SendSmtpEmail;
+
+use Symfony\Bundle\SecurityBundle\Security;
 
 
 #[Route('/user')]
@@ -65,6 +61,8 @@ final class UserController extends AbstractController
         UserPasswordHasherInterface $hasher,
         MailerInterface $mailer,
         UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher,
+        Security $security
 
     ): Response {
 
@@ -74,6 +72,20 @@ final class UserController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Verifica se o usuário conectado é um ROLE_MANAGER
+            if ($security->isGranted('ROLE_MANAGER')) {
+                // Senha padrão
+                $defaultPassword = 'changeme@2025!Rz#8x';
+                $hashedPassword = $passwordHasher->hashPassword($user, $defaultPassword);
+                $user->setPassword($hashedPassword);
+            } else {
+                // Pega a senha do formulário
+                $plainPassword = $form->get('password')->getData();
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
+
+            $user->setPassword($hashedPassword);
             // Recuperar a equipe selecionada no formulário
             $teamName = $form->get('team')->getData();
             // Buscar a equipe no banco de dados
@@ -86,9 +98,6 @@ final class UserController extends AbstractController
             }
             // Associar o usuário à equipe
             $user->setTeam($team);
-            // Hash do password
-            $password = $hasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
             // Salvar foto do usuário
             $path = "assets/images/user";
             $file = $form->get('photoUser')->getData();
@@ -96,6 +105,7 @@ final class UserController extends AbstractController
                 $file->move($path, $file->getClientOriginalName());
                 $user->setPhotoUser($path . '/' . $file->getClientOriginalName());
             }
+
             // Persistir o usuário
             $entityManager->persist($user);
             $entityManager->flush();
