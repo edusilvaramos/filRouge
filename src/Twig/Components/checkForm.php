@@ -13,7 +13,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent(name: 'CheckForm')]
+#[AsLiveComponent(name: 'checkForm')]
 class CheckForm extends AbstractController
 {
     use ComponentWithFormTrait;
