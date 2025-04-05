@@ -1,4 +1,9 @@
+document.addEventListener("DOMContentLoaded", function () {
+
 let button = document.querySelectorAll("button");
+if (button === null) {
+	return;
+}
 button.forEach((button) => {
     button.addEventListener("click", function () {
 		let emailFormButton = button.value; 
@@ -8,3 +13,4 @@ button.forEach((button) => {
 
     });
   });
+});

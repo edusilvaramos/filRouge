@@ -44,6 +44,8 @@ class UserType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Son Nom']
             ])
             ->add('birthday', DateType::class, [
+                'required' => true,
+                'empty_data' => null,
                 'widget' => 'single_text',
                 'label' => 'Date de Naissance',
                 'html5' => true,

@@ -1,4 +1,6 @@
-let button = document.querySelectorAll("button");
+
+document.addEventListener("DOMContentLoaded", function () {
+	let button = document.querySelectorAll("button");
 button.forEach((button) => {
     button.addEventListener("click", function () {
 		let emailFormButton = button.value; 
@@ -8,3 +10,4 @@ button.forEach((button) => {
 
     });
   });
+});

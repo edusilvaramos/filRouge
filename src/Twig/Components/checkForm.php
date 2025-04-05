@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components;
 
+use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,47 +13,24 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent ( name: 'checkForm')] 
-class checkForm extends AbstractController
+#[AsLiveComponent(name: 'CheckForm')]
+class CheckForm extends AbstractController
 {
     use ComponentWithFormTrait;
     use DefaultActionTrait;
+
     #[LiveProp]
     public bool $isSuccessful = false;
 
     #[LiveProp]
     public ?string $newUserEmail = null;
 
-    protected function instantiateForm(): FormInterface
-    {
-        return $this->createForm(UserType::class);
-    }
-
-    public function hasValidationErrors(): bool
-    {
-        return $this->getForm()->isSubmitted() && !$this->getForm()->isValid();
-    }
-
-    #[LiveAction]
-    public function saveRegistration()
-    {
-        $this->submitForm();
-
-        // save to the database
-        // or, instead of creating a LiveAction, allow the form to submit
-        // to a normal controller: that's even better.
-        // $newUser = $this->getFormInstance()->getData();
-
-        $this->newUserEmail = $this->getForm()
-            ->get('email')
-            ->getData();
-        $this->isSuccessful = true;
-    }
     #[LiveProp(writable: true)]
     public ?string $email = null;
 
-    #[LiveProp]
+    #[LiveProp(writable: true)]
     public bool $emailExists = false;
+
 
     #[LiveAction]
     public function checkEmail(UserRepository $userRepository): void
@@ -62,5 +40,15 @@ class checkForm extends AbstractController
         } else {
             $this->emailExists = false;
         }
+    }
+
+    protected function instantiateForm(): FormInterface
+    {
+        $form = $this->createForm(UserType::class);
+        // Preenche o campo email apenas, para o formulário refletir visualmente o valor
+        if ($this->email) {
+            $form->get('email')->setData($this->email);
+        }
+        return $form;
     }
 }

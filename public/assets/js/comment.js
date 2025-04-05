@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   commentsModal.addEventListener("shown.bs.modal", function () {
     let commentsContainer = document.getElementById("content-comments");
+    if (!commentsContainer) {
+      return;
+    }
     commentsContainer.scrollTop = commentsContainer.scrollHeight;
   });
   document

@@ -16,5 +16,4 @@ import '/assets/js/getEmploye.js';
 import '/assets/js/notification.js';
 import '/assets/js/comment.js';
 
-
 console.log('This log comes from assets/app.js - welcome to AssetMapper! ');

@@ -1,28 +1,26 @@
-<div {{ attributes }}> 
-	{{ form_start(form, {
-		attr: {
-			'data-action': 'live#action:prevent',
-			'data-live-action-param': 'saveRegistration',
-			novalidate: true
-		}
-	}) }}
+<div {{ attributes }} data-controller="live">
+	{{ form_start(form) }}
 
 	<div class="mb-3">
 		{{ form_row(form.matricule) }}
 	</div>
 
 	<div class="mb-3">
-		{{ form_row(form.email, {
-			attr: {
-				'data-model': 'email',
-				'data-action': 'blur->live#action',
-				'data-live-action-param': 'checkEmail'
-			}
-		}) }}
+		{{ form_label(form.email) }}
+		{{ form_widget(form.email, {
+        attr: {
+            'data-live-name': 'email',
+            'data-action': 'blur->live#action',
+			'data-live-action-param': 'checkEmail',
+			'data-model': 'email'
+        }
+    }) }}
+		{{ form_errors(form.email) }}
 
 		{% if emailExists %}
-			<small class="text-danger">L'utilisateur est déjà inscrit</small>
-		{% endif %}
+    <small class="text-danger">L'utilisateur est déjà inscrit</small>
+{% endif %}
+
 	</div>
 
 	<div class="mb-3">

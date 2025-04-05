@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -33,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private ?string $password = "changeme@2025!Rz#8x";
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $matricule = null;
@@ -43,8 +44,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    
+    #[Assert\NotBlank(message: 'La date de naissance est obligatoire.')]
     private ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(length: 30)]

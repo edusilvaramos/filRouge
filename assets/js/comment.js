@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   // {# para fazer o scroll automatico no modal direto pro final #}
+  const commentsModal = document.getElementById("commentsModal");
+  if (!commentsModal) {
+    return;
+  }
 
   commentsModal.addEventListener("shown.bs.modal", function () {
     let commentsContainer = document.getElementById("content-comments");
+    if (!commentsContainer) {
+      return;
+    }
     commentsContainer.scrollTop = commentsContainer.scrollHeight;
   });
   document
