@@ -1,86 +1,98 @@
 <div {{ attributes }} data-controller="live">
-	{{ form_start(form) }}
+    {{ form_start(form) }}
 
-	<div class="mb-3">
-		{{ form_row(form.matricule) }}
-	</div>
+    <div class="mb-3">
+        {{ form_row(form.matricule) }}
+        {% if form.matricule.vars.value is empty %}
+            <div class="text-danger">O campo matricule é obrigatório.</div>
+        {% endif %}
+    </div>
 
-	<div class="mb-3">
-		{{ form_label(form.email) }}
-		{{ form_widget(form.email, {
-        attr: {
-            'data-live-name': 'email',
-            'data-action': 'blur->live#action',
-			'data-live-action-param': 'checkEmail',
-			'data-model': 'email'
-        }
-    }) }}
-		{{ form_errors(form.email) }}
+    <div class="mb-3">
+        {{ form_label(form.email) }}
+        {% if email is empty %}
+            <div class="text-danger">O campo email é obrigatório.</div>
+        {% endif %}
+        {{ form_widget(form.email, {
+            attr: {
+                'data-live-name': 'email',
+                'data-action': 'blur->live#action',
+                'data-live-action-param': 'checkEmail',
+                'data-model': 'email'
+            }
+        }) }}
+        {{ form_errors(form.email) }}
+        {% if emailExists %}
+            <small class="text-danger">O usuário já está inscrito</small>
+        {% endif %}
+    </div>
 
-		{% if emailExists %}
-    <small class="text-danger">L'utilisateur est déjà inscrit</small>
-{% endif %}
-
-	</div>
-{% if form.password is defined %}
-
-
-
-	<div class="mb-3">
-		{{ form_row(form.password.first) }}
-	</div>
-
-	<div class="mb-3">
-		{{ form_row(form.password.second) }}
-	</div>
-{% endif %}
-	<div class="mb-3">
-		{{ form_row(form.firstName) }}
-	</div>
-
-	<div class="mb-3">
-		{{ form_row(form.lastName) }}
-	</div>
-
-	<div>
-    {{ form_label(form.birthday) }}
-    {{ form_widget(form.birthday, {
-        attr: {
-            'data-action': 'blur->live#action',
-            'data-live-action': 'validateBirthday',
-			'data-live-action-param': 'validateBirthday',
-			'data-model': 'birthday'
-        }
-    }) }}
-
-    {% if not birthdayIsValid %}
-        <div class="text-danger">La date de naissance est obligatoire.</div>
+    {% if form.password is defined %}
+        <div class="mb-3">
+            {{ form_row(form.password.first) }}
+        </div>
+        <div class="mb-3">
+            {{ form_row(form.password.second) }}
+        </div>
     {% endif %}
-</div>
 
-	<div class="mb-3">
-		{{ form_row(form.telephone) }}
-	</div>
+    <div class="mb-3">
+        {{ form_row(form.firstName) }}
+        {% if form.firstName.vars.value is empty %}
+            <div class="text-danger">O campo primeiro nome é obrigatório.</div>
+        {% endif %}
+    </div>
 
-	<div class="mb-3">
-		{{ form_row(form.team) }}
-	</div>
+    <div class="mb-3">
+        {{ form_row(form.lastName) }}
+        {% if form.lastName.vars.value is empty %}
+            <div class="text-danger">O campo sobrenome é obrigatório.</div>
+        {% endif %}
+    </div>
 
-	<div class="mb-3">
-		{{ form_row(form.service) }}
-	</div>
+    <div>
+        {{ form_label(form.birthday) }}
+        {% if birthday is empty %}
+            <div class="text-danger">A data de nascimento é obrigatória.</div>
+        {% endif %}
+        {{ form_widget(form.birthday, {
+            attr: {
+                'data-action': 'blur->live#action',
+                'data-live-action': 'validateBirthday',
+                'data-live-action-param': 'validateBirthday',
+                'data-model': 'birthday'
+            }
+        }) }}
+        {% if not birthdayIsValid %}
+            <div class="text-danger">A data de nascimento é obrigatória.</div>
+        {% endif %}
+    </div>
 
-	<div class="mb-3">
-		{{ form_row(form.nameUser) }}
-	</div>
+    <div class="mb-3">
+        {{ form_row(form.telephone) }}
+    </div>
 
-	<div class="mb-3">
-		{{ form_row(form.photoUser) }}
-	</div>
+    <div class="mb-3">
+        {{ form_row(form.team) }}
+    </div>
 
-	<button type="submit" class="btn btn-primary w-100 mt-3" {{ emailExists ? 'disabled' }}>
-		{{ button_label|default('Save') }}
-	</button>
+    <div class="mb-3">
+        {{ form_row(form.service) }}
+    </div>
 
-	{{ form_end(form) }}
+    <div class="mb-3">
+        {{ form_row(form.nameUser) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_row(form.photoUser) }}
+    </div>
+
+    {# Variável que reúne as condições para desabilitar o botão #}
+    {% set disableSubmit = (email is empty or birthday is empty or not birthdayIsValid or emailExists) %}
+    <button type="submit" class="btn btn-primary w-100 mt-3" {{ disableSubmit ? 'disabled' }}>
+        {{ button_label|default('Save') }}
+    </button>
+
+    {{ form_end(form) }}
 </div>
