@@ -4,14 +4,14 @@
     <div class="mb-3">
         {{ form_row(form.matricule) }}
         {% if form.matricule.vars.value is empty %}
-            <div class="text-danger">O campo matricule é obrigatório.</div>
+            <div class="text-danger">La matricule est obligatoire</div>
         {% endif %}
     </div>
 
     <div class="mb-3">
         {{ form_label(form.email) }}
         {% if email is empty %}
-            <div class="text-danger">O campo email é obrigatório.</div>
+            <div class="text-danger">L'email est obligatoire</div>
         {% endif %}
         {{ form_widget(form.email, {
             attr: {
@@ -23,7 +23,7 @@
         }) }}
         {{ form_errors(form.email) }}
         {% if emailExists %}
-            <small class="text-danger">O usuário já está inscrito</small>
+            <small class="text-danger">L'utilisateur est deja cadastre</small>
         {% endif %}
     </div>
 
@@ -39,21 +39,21 @@
     <div class="mb-3">
         {{ form_row(form.firstName) }}
         {% if form.firstName.vars.value is empty %}
-            <div class="text-danger">O campo primeiro nome é obrigatório.</div>
+            <div class="text-danger">le prenom est obligatoire</div>
         {% endif %}
     </div>
 
     <div class="mb-3">
         {{ form_row(form.lastName) }}
         {% if form.lastName.vars.value is empty %}
-            <div class="text-danger">O campo sobrenome é obrigatório.</div>
+            <div class="text-danger">l'nom est obligatoire</div>
         {% endif %}
     </div>
 
     <div>
         {{ form_label(form.birthday) }}
         {% if birthday is empty %}
-            <div class="text-danger">A data de nascimento é obrigatória.</div>
+            <div class="text-danger">l'anniversaire est obligatoire</div>
         {% endif %}
         {{ form_widget(form.birthday, {
             attr: {
@@ -64,7 +64,7 @@
             }
         }) }}
         {% if not birthdayIsValid %}
-            <div class="text-danger">A data de nascimento é obrigatória.</div>
+            <div class="text-danger">l'anniversaire est invalide</div>
         {% endif %}
     </div>
 
