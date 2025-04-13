@@ -83,7 +83,7 @@ final class TaskController extends AbstractController
     #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
     public function show(Task $task, UserRepository $userRepository): Response
     {
-        dd($task);
+        // dd($task);
         $users = $userRepository->findAll();
 
         return $this->render('task/showTask.html.twig', [

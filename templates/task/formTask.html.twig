@@ -24,6 +24,10 @@
 	{{ form_label(form.flagTask, 'État de la tâche', {'label_attr': {'class': 'form-label fw-bold'}}) }}
 	{{ form_widget(form.flagTask, {'attr': {'class': 'form-select'}}) }}
 </div>
+{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MANAGER') %}
+
+
+
 {% if task.employe %}
 	<p class="fw-bold text-primary">La tache est affecte a l'utilisateur :
 		{{  task.employe }}</p>
@@ -46,7 +50,7 @@
 
 	</label>
 {% endfor %}
-
+ {% endif %}
 <hr>
 <link rel="stylesheet" href="{{asset('assets/css/email.css')}}">
 <div class="text-center mt-3">

@@ -46,8 +46,6 @@ final class StatistiquesController extends AbstractController
         $pieChart = new PieChart();
         $pieChart->getData()->setArrayToDataTable($data);
         $pieChart->getOptions()->setTitle('Tâches par Projet');
-        $pieChart->getOptions()->setHeight(500);
-        $pieChart->getOptions()->setWidth(900);
         $pieChart->getOptions()->getTitleTextStyle()->setBold(true);
         $pieChart->getOptions()->getTitleTextStyle()->setColor('#046409900');
         $pieChart->getOptions()->getTitleTextStyle()->setItalic(true);

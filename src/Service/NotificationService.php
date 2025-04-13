@@ -25,4 +25,4 @@ class NotificationService
         $this->entityManager->flush();
     }
 }
-//Agora, quando precisar criar uma notificação, basta injetar NotificationService e chamar createNotification($user, "Sua mensagem aqui");.
+//injetar NotificationService e chamar createNotification($user, "Sua mensagem aqui");.

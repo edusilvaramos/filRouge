@@ -3,8 +3,12 @@
 {% block title %}home
 {% endblock %}
 {% block body %}
-		<div class="container mt-5 px-3 px-md-5 bg-">
-			{{ render(path('app_statistiques')) }}
+	<div class="container mt-5 px-3 px-md-5 mb-5">
+		<div class="row">
+			<div>
+				{{ render(path('app_statistiques')) }}
+			</div>
 		</div>
-		<a href="{{ path('outputPdf') }}" class="btn btn-primary btn-sm fs-5 m-3">Telecharger le rapport PDF</a>
+	</div>
+	<a href="{{ path('outputPdf') }}" class="btn btn-primary btn-sm fs-5 m-3">Telecharger le rapport PDF</a>
 {% endblock %}
