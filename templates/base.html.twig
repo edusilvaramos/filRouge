@@ -62,6 +62,7 @@
 								{# -------- notifications --------  #}
 								{{ render(path('notifications')) }}
 								{% if is_granted('ROLE_ADMIN') %}
+								<a class="nav-link" href="{{ path('app_user_search') }}">Employes</a>
 									<li class="nav-item dropdown">
 										<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Créer</a>
 										<div class="dropdown-menu fs-5">

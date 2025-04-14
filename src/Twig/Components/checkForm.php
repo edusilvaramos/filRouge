@@ -32,7 +32,6 @@ class CheckForm extends AbstractController
     public bool $birthdayIsValid = true;
 
 
-
     #[LiveAction]
     public function checkEmail(UserRepository $userRepository): void
     {
