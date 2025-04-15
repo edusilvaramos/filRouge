@@ -4,13 +4,41 @@ namespace App\Tests\Form;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Form\PreloadedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+
 
 // happy path
 
 // test to verify the UserType form, that is the reason for the TypeTestCase
 class UserTypeTest extends TypeTestCase
 {
+
+    // Set-up Test
+    private MockObject $security;
+
+    protected function getExtensions(): array
+    {
+
+        // i need to mock the security service
+        $this->security = $this->getMockBuilder(Security::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->security->method('isGranted')
+            ->with('ROLE_MANAGER')
+            ->willReturn(false);
+        /**
+         * 
+         * @param Security $security
+         */
+        $formType = new UserType($this->security);
+
+        return [
+            new PreloadedExtension([$formType], []),
+        ];
+    }
     /**
      * @dataProvider UserDataProvider
      */
@@ -32,7 +60,7 @@ class UserTypeTest extends TypeTestCase
         $this->assertEquals($expectedUser->getEmail(), $data->getEmail());
         $this->assertEquals($expectedUser->getFirstName(), $data->getFirstName());
         $this->assertEquals($expectedUser->getLastName(), $data->getLastName());
-        $this->assertEquals($expectedUser->getBirthday()->format('Y-m-d'),$data->getBirthday()->format('Y-m-d'));
+        $this->assertEquals($expectedUser->getBirthday()->format('Y-m-d'), $data->getBirthday()->format('Y-m-d'));
         $this->assertEquals($expectedUser->getTelephone(), $data->getTelephone());
         $this->assertEquals($expectedUser->getService(), $data->getService());
         $this->assertEquals($expectedUser->getNameUser(), $data->getNameUser());
@@ -49,6 +77,10 @@ class UserTypeTest extends TypeTestCase
         $formData = [
             'matricule' => 'e001',
             'email' => 'edusilvaramos.1998@gmail.com', // Simulated user in the data base
+            'password' => [
+                'first' => 'changeme@2025!Rz#8x',
+                'second' => 'changeme@2025!Rz#8x',
+            ],
             'firstName' => 'Eduardo',
             'lastName' => 'Silva Ramos',
             'birthday' => '1998-08-21',
@@ -80,6 +112,7 @@ class UserTypeTest extends TypeTestCase
         $expectedUser = new User();
         $expectedUser->setMatricule('e001');
         $expectedUser->setEmail('edusilvaramos.1998@gmail.com');
+        $expectedUser->setPassword('changeme@2025!Rz#8x');
         $expectedUser->setFirstName('Eduardo');
         $expectedUser->setLastName('Silva Ramos');
         $expectedUser->setBirthday(\DateTime::createFromFormat('d/m/Y', '21/08/1998'));
@@ -91,6 +124,10 @@ class UserTypeTest extends TypeTestCase
         $formData = [
             'matricule' => 'e001',
             'email' => 'edusilvaramos.1998@gmail.com',
+            'password' => [
+                'first' => 'changeme@2025!Rz#8x',
+                'second' => 'changeme@2025!Rz#8x',
+            ],
             'firstName' => 'Eduardo',
             'lastName' => 'Silva Ramos',
             'birthday' => '1998-08-21',
