@@ -21,11 +21,11 @@ class UserTypeTest extends TypeTestCase
         // i need to mock the Security service, because it is used as a dependency from the UserType
         $this->security = $this->getMockBuilder(Security::class)
             ->disableOriginalConstructor()
-            ->getMock(); 
+            ->getMock();
         // i mock the isGranted to simulate the user so he has the ROLE_MANAGER 
         $this->security->method('isGranted')
             ->with('ROLE_MANAGER')
-            ->willReturn(true);    
+            ->willReturn(true);
         // Create an instance of the UserType FormType,
         // passing the mocked security service as a dependency
         $formType = new UserType($this->security);
@@ -62,41 +62,39 @@ class UserTypeTest extends TypeTestCase
         $this->assertEquals($expectedUser->getService(), $data->getService());
         $this->assertEquals($expectedUser->getNameUser(), $data->getNameUser());
     }
-
+    
     // error path
+    /**
+     * @dataProvider UserDataProvider
+     */
     // Simulate error manually since TypeTestCase does not use the database
-
-    public function testSubmitDuplicateEmail(): void
+    public function testSubmitDuplicateUser(array $formData): void
     {
+        // Create a new empty User object to bind the form data to
         $user = new User();
+        // Create the form using the UserType class and bind it to the User object
         $form = $this->factory->create(UserType::class, $user);
+        // Define form data that would normally cause a validation error (duplicate email)
 
-        $formData = [
-            'matricule' => 'e001',
-            'email' => 'edusilvaramos.1998@gmail.com', // Simulated user in the data base
-            'password' => [
-                'first' => 'changeme@2025!Rz#8x',
-                'second' => 'changeme@2025!Rz#8x',
-            ],
-            'firstName' => 'Eduardo',
-            'lastName' => 'Silva Ramos',
-            'birthday' => '1998-08-21',
-            'telephone' => '0000000000',
-            'service' => 'Informatique',
-            'nameUser' => 'Eduardo Ramos',
-        ];
-
+        // Submit the form with the error path data
         $form->submit($formData);
+        // Manually simulate a validation error on the 'email' field
+        // because there's no database check in TypeTestCase :/
+        // throw new \Exception("Simulated error");
 
-        // Simulate error manually since TypeTestCase has no DB
-        $form->get('email')->addError(new \Symfony\Component\Form\FormError('This email is already used.'));
-
+        $form->get('email')->addError(
+            new \Symfony\Component\Form\FormError('This email is already used.')
+        );
+        // Assert that the form is now considered invalid
         $this->assertFalse($form->isValid());
+        // throw new \Exception("Simulated error");
         $this->assertCount(1, $form->get('email')->getErrors());
-        // for test message
-        // $this->assertEquals('mensagem diferente', $form->get('email')->getErrors()[0]->getMessage());
-        $this->assertEquals('This email is already used.', $form->get('email')->getErrors()[0]->getMessage());
+        $this->assertEquals(
+            'This email is already used.',
+            $form->get('email')->getErrors()[0]->getMessage()
+        );
     }
+
 
 
     /**
