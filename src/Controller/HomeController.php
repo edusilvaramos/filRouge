@@ -2,17 +2,43 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
+use App\Entity\Task;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
 
-final class HomeController extends AbstractController
+class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function index(): Response
+    public function index(EntityManagerInterface $em,)
     {
+        $user = $this->getUser();
+
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_MANAGER')) {
+            $projects = $em->getRepository(Project::class)->findAll();
+        } else {
+            $projects = $em->getRepository(Project::class)->findProjectsByUser($user);
+        }
+
+        $tasksByProject = [];
+
+        foreach ($projects as $project) {
+            if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_MANAGER')) {
+                $tasks = $em->getRepository(Task::class)->findBy(['Project' => $project]);
+            } else {
+                $tasks = $em->getRepository(Task::class)->findBy([
+                    'Project' => $project,
+                    'employe' => $user
+                ]);
+            }
+            $tasksByProject[$project->getId()] = $tasks;
+        }
+
         return $this->render('home/home.html.twig', [
-            'name' => 'Eduardo Ramos',
+            'projects' => $projects,
+            'tasksByProject' => $tasksByProject,
         ]);
     }
 }
